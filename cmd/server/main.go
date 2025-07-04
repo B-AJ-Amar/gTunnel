@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/B-AJ-Amar/gTunnel/server"
+
+	"github.com/B-AJ-Amar/gTunnel/internal/server"
 )
 
 func main() {
