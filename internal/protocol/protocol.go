@@ -14,6 +14,7 @@ const (
 
 // SocketMessage is a generic message that wraps different message types based on Type.
 type SocketMessage struct {
+	// ID      string            `json:"ID"` // ? to add : connection id
 	Type    MessageType       `json:"type"`
 	Payload json.RawMessage   `json:"payload"`
 }
@@ -38,6 +39,6 @@ func SerializeMessage(v interface{}) ([]byte, error) {
 	return json.Marshal(v)
 }
 
-func DeserializelMessage(data []byte, v interface{}) error {
+func DeserializeMessage(data []byte, v interface{}) error {
 	return json.Unmarshal(data, v)
 }
