@@ -14,8 +14,9 @@ import (
 )
 
 type TunnelConn struct {
-	ID   string
-	Conn *websocket.Conn
+	ID         string
+	Conn       *websocket.Conn
+	ResponseCh chan []byte 
 }
 
 var (
@@ -35,7 +36,11 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := uuid.New().String()
-	tunnel := &TunnelConn{ID: id, Conn: conn}
+	tunnel := &TunnelConn{
+		ID:         id,
+		Conn:       conn,
+		ResponseCh: make(chan []byte), 
+	}
 
 	connMu.Lock()
 	connections[id] = tunnel
@@ -72,23 +77,26 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	// Echo loop
+	// WebSocket read loop
 	for {
-		mt, message, err := conn.ReadMessage()
+		_, message, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Read error:", err)
 			break
 		}
+
 		log.Printf("[%s] Received: %s", id, message)
-		if err := conn.WriteMessage(mt, message); err != nil {
-			log.Println("Write error:", err)
-			break
+
+		// Send to response channel (non-blocking)
+		select {
+		case tunnel.ResponseCh <- message:
+		default:
+			log.Printf("[%s] WARNING: Dropping message - no listener waiting", id)
 		}
 	}
 }
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
-	// For now, just use the first available connection
 	connMu.Lock()
 	var tunnel *TunnelConn
 	for _, t := range connections {
@@ -142,58 +150,43 @@ func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Tunnel write failed", http.StatusBadGateway)
 		return
 	}
+	log.Println("httpToWebSocketHandler: message sent to tunnel")
 
-	_, responseData, err := tunnel.Conn.ReadMessage()
-	if err != nil {
-		http.Error(w, "Tunnel read failed", http.StatusBadGateway)
-		return
-	}
-
-	var responseMsg protocol.SocketMessage
-	if err := protocol.DeserializeMessage(responseData, &responseMsg); err != nil {
-		http.Error(w, "Invalid tunnel response", http.StatusInternalServerError)
-		return
-	}
-
-	if responseMsg.Type != protocol.MessageTypeHTTPResponse {
-		http.Error(w, "Unexpected message type", http.StatusInternalServerError)
-		return
-	}
-
-	var httpResp protocol.HTTPResponseMessage
-	if err := protocol.DeserializeMessage(responseMsg.Payload, &httpResp); err != nil {
-		http.Error(w, "Invalid response payload", http.StatusInternalServerError)
-		return
-	}
-
-	for name, value := range httpResp.Headers {
-		w.Header().Set(name, value)
-	}
-	w.WriteHeader(httpResp.StatusCode)
-	w.Write(httpResp.Body)
-}
-
-func testHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("testHandler called")
-	connMu.Lock()
-	if len(connections) == 0 {
-		log.Println("No active connections")
-	} else {
-		for id, tunnel := range connections {
-			log.Printf("Sending test message to: %s", id)
-			tunnel.Conn.WriteMessage(websocket.TextMessage, []byte("Hello from testHandler"))
+	// Wait for response (with timeout)
+	select {
+	case responseData := <-tunnel.ResponseCh:
+		var responseMsg protocol.SocketMessage
+		if err := protocol.DeserializeMessage(responseData, &responseMsg); err != nil {
+			http.Error(w, "Invalid tunnel response", http.StatusInternalServerError)
+			return
 		}
-	}
-	connMu.Unlock()
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"message":"TEST"}`))
+		if responseMsg.Type != protocol.MessageTypeHTTPResponse {
+			http.Error(w, "Unexpected message type", http.StatusInternalServerError)
+			return
+		}
+
+		var httpResp protocol.HTTPResponseMessage
+		if err := protocol.DeserializeMessage(responseMsg.Payload, &httpResp); err != nil {
+			http.Error(w, "Invalid response payload", http.StatusInternalServerError)
+			return
+		}
+
+		for name, value := range httpResp.Headers {
+			w.Header().Set(name, value)
+		}
+		w.WriteHeader(httpResp.StatusCode)
+		w.Write(httpResp.Body)
+
+	case <-time.After(10 * time.Second):
+		http.Error(w, "Tunnel response timeout", http.StatusGatewayTimeout)
+	}
 }
+
 
 func StartServer(addr string) {
 	r := chi.NewRouter()
 	r.Get("/ws", wsHandler)
-	// r.NotFound(testHandler)
 	r.NotFound(httpToWebSocketHandler)
 
 	log.Println("Server listening on", addr)
