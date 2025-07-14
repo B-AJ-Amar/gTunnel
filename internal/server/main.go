@@ -7,20 +7,17 @@ import (
 	"sync"
 	"time"
 
+	"github.com/B-AJ-Amar/gTunnel/internal/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
-type TunnelConn struct {
-	ID         string
-	Conn       *websocket.Conn
-	ResponseCh chan []byte 
-}
+
 
 var (
-	connections = make(map[string]*TunnelConn)
+	connections = make(map[string]*models.ServerTunnelConn)
 	connMu      sync.Mutex
 )
 
@@ -36,7 +33,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := uuid.New().String()
-	tunnel := &TunnelConn{
+	tunnel := &models.ServerTunnelConn{
 		ID:         id,
 		Conn:       conn,
 		ResponseCh: make(chan []byte), 
@@ -56,26 +53,6 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Connection closed: %s", id)
 	}()
 
-	conn.SetPongHandler(func(appData string) error {
-		log.Println("Received pong:", appData)
-		return nil
-	})
-
-	// Ping loop
-	go func() {
-		ticker := time.NewTicker(30 * time.Second)
-		defer ticker.Stop()
-		for {
-			<-ticker.C
-			log.Println("Sending ping to", id)
-			err := conn.WriteMessage(websocket.PingMessage, []byte("ping"))
-			if err != nil {
-				log.Println("Ping failed, closing connection:", err)
-				conn.Close()
-				return
-			}
-		}
-	}()
 
 	// WebSocket read loop
 	for {
@@ -98,7 +75,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 	connMu.Lock()
-	var tunnel *TunnelConn
+	var tunnel *models.ServerTunnelConn
 	for _, t := range connections {
 		tunnel = t
 		break
