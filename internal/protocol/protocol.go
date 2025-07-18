@@ -10,6 +10,13 @@ type MessageType int
 const (
 	MessageTypeHTTPRequest  MessageType = 1
 	MessageTypeHTTPResponse MessageType = 2
+
+	MessageTypeConnectionRequest MessageType = 3
+	MessageTypeConnectionResponse MessageType = 4
+	
+	MessaageTypeConfigRequest MessageType = 5
+	MessageTypeConfigResponse MessageType = 6
+	MessageTypeError          MessageType = 7
 )
 
 // SocketMessage is a generic message that wraps different message types based on Type.

@@ -14,11 +14,14 @@
 ```bash
 gTunnel/
 ├── cmd/
-│ ├── client/ # Client binary
-│ └── server/ # Server binary
-├── client/ # Client-side tunnel logic
-├── server/ # Public server logic
-├── protocol/ # Shared message format & protocol
+│ ├── client/   # Client binary
+│ └── server/   # Server binary
+├── internal/   # Client-side tunnel logic
+│ ├── client/   # Client-side tunnel logic
+│ ├── server/   # Public server logic
+│ ├── protocol/ # Shared message format & protocol
+│ ├── models/   # Data models
+│ └── handlers/ # Request handlers
 ├── go.mod
 └── README.md
 ```
@@ -34,18 +37,17 @@ comming soon
 ## Features
 
 - [x] TCP tunnel
-
-- []HTTP subdomain routing
-
 - []Authentication (API token)
-
-- []TLS encryption (optional)
-
-- []WebSocket support
-
+- []subdomain/path routing (multiple tunnels per client)
 - []Multiplexing (multiple streams per client)
-
+- []TLS encryption (optional)
+- []WebSocket support
 - []Admin dashboard (via Chi)
+- []double client server 
+  - gtunnel client to gtunnel server
+  - client management server (dashboard , settings ..etc)
+- []Queue for request in case of disconnected clients
+
 
 ## Contributing
 

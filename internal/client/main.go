@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"log"
@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/models"
+	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
@@ -14,6 +15,15 @@ var (
     connections = make(map[string]*models.ClientTunnelConn)
     connMu      sync.Mutex
 )
+
+
+func ClientHTTPResponseHandler(message protocol.HTTPResponseMessage, conn *websocket.Conn){
+	
+}
+
+func ClientHTTPRequestHandler(message protocol.HTTPRequestMessage, conn *websocket.Conn){
+
+}
 
 func WsClientHandler(WsUrl url.URL) {
     // Connect to the WebSocket server
@@ -76,6 +86,41 @@ func WsClientHandler(WsUrl url.URL) {
 
 		log.Printf("[%s] Received: %s", id, message)
 
+		// Deserialize the message
+		var socketMessage protocol.SocketMessage
+		err = protocol.DeserializeMessage(message, &socketMessage)
+		if err != nil {
+			log.Printf("[%s] Error deserializing message: %v", id, err)
+			continue
+		}
+		log.Printf("[%s] Message type: %d", id, socketMessage.Type)
+
+		// Handle the message based on its type
+		switch socketMessage.Type {
+			case protocol.MessageTypeHTTPRequest:
+				var httpRequest protocol.HTTPRequestMessage
+				err = protocol.DeserializeMessage(socketMessage.Payload, &httpRequest)
+				if err != nil {
+					log.Printf("[%s] Error deserializing HTTP request: %v", id, err)
+					continue
+				}
+				log.Printf("[%s] HTTP Request: %s %s", id, httpRequest.Method, httpRequest.URL)
+				ClientHTTPRequestHandler(httpRequest, conn)
+			case protocol.MessageTypeHTTPResponse:
+				var httpResponse protocol.HTTPResponseMessage
+				err = protocol.DeserializeMessage(socketMessage.Payload, &httpResponse)
+				if err != nil {
+					log.Printf("[%s] Error deserializing HTTP response: %v", id, err)
+					continue
+				}
+				log.Printf("[%s] HTTP Response: %d", id, httpResponse.StatusCode)
+				ClientHTTPResponseHandler(httpResponse, conn)
+			default:
+				log.Printf("[%s] Unknown message type: %d", id, socketMessage.Type)
+				continue
+		}
+
+
 		// Send to response channel (non-blocking)
 		select {
 		case tunnel.ResponseCh <- message:
@@ -87,8 +132,6 @@ func WsClientHandler(WsUrl url.URL) {
 
 }
 
-func main() {
-    var WsUrl = url.URL{Scheme: "ws", Host: "localhost:8080", Path: "/ws"}
-
-    WsClientHandler(WsUrl)
+func StartClient(WsUrl url.URL) {
+	WsClientHandler(WsUrl)
 }
