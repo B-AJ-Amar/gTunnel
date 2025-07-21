@@ -26,12 +26,22 @@ var upgrader = websocket.Upgrader{
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
+
+	// TODO : before updating the connection, check if the baseUrl query param is already exists
+	baseUrl := r.URL.Query().Get("baseUrl")
+	if baseUrl != "" {
+		log.Printf("baseUrl query param: %s", baseUrl)
+	}
+
+
+
 	conn, err := upgrader.Upgrade(w, r, nil)
+	
 	if err != nil {
 		log.Println("Upgrade error:", err)
 		return
 	}
-
+	
 	id := uuid.New().String()
 	tunnel := &models.ServerTunnelConn{
 		ID:         id,

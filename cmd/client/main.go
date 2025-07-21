@@ -9,5 +9,13 @@ import (
 
 func main() {
 	fmt.Println("Hello, gTunnel client!")
-	client.StartClient(url.URL{Scheme: "ws", Host: "localhost:8080", Path: "/ws"})
+	u := url.URL{
+		Scheme:   "ws",
+		Host:     "localhost:8080",
+		Path:     "/ws",
+	}
+	q := u.Query()
+	q.Set("baseUrl", "/base_url")
+	u.RawQuery = q.Encode()
+	client.StartClient(u)
 }

@@ -37,6 +37,7 @@ func WsClientHandler(WsUrl url.URL) {
 		ID:         id,
 		Conn:       conn,
 		ResponseCh: make(chan []byte),
+		Port:       WsUrl.Port(), 
 	}
     log.Printf("New connection established: %s", id)
 
