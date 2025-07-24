@@ -4,13 +4,13 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
-	"github.com/B-AJ-Amar/gTunnel/internal/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
+	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
@@ -27,12 +27,32 @@ var upgrader = websocket.Upgrader{
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 
-	// TODO : before updating the connection, check if the baseUrl query param is already exists
-	baseUrl := r.URL.Query().Get("baseUrl")
-	if baseUrl != "" {
-		log.Printf("baseUrl query param: %s", baseUrl)
+
+	id := r.URL.Query().Get("id")
+	baseURL := r.URL.Query().Get("base_url")
+	
+	log.Printf("WebSocket connection request: id=%s, baseURL=%s", id, baseURL)
+	if id == "" {
+		http.Error(w, "Missing 'id' query parameter", http.StatusBadRequest)
+		return
 	}
 
+	// if base url is empty , generate random base url e,.g /app-1
+	if baseURL == "" {
+		baseURL = "/app-" + strings.Split(id, "-")[4] // simple example, can be improved
+		log.Printf("Generated base URL: %s", baseURL)
+	}
+
+	// check if baseURL is already in use
+	connMu.Lock()
+	for _, t := range connections {
+		if t.BaseURL == baseURL {
+			connMu.Unlock()
+			http.Error(w, "Base URL already in use", http.StatusConflict)
+			return
+		}
+	}
+	connMu.Unlock()
 
 
 	conn, err := upgrader.Upgrade(w, r, nil)
@@ -42,11 +62,11 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	id := uuid.New().String()
 	tunnel := &models.ServerTunnelConn{
 		ID:         id,
 		Conn:       conn,
-		ResponseCh: make(chan []byte), 
+		ResponseCh: make(chan []byte),
+		BaseURL:    baseURL,
 	}
 
 	connMu.Lock()
@@ -84,13 +104,8 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
-	connMu.Lock()
-	var tunnel *models.ServerTunnelConn
-	for _, t := range connections {
-		tunnel = t
-		break
-	}
-	connMu.Unlock()
+
+	tunnel := PathTunnelRouter(r, connections)
 
 	if tunnel == nil {
 		http.Error(w, "No tunnel connected", http.StatusServiceUnavailable)
@@ -173,7 +188,7 @@ func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 
 func StartServer(addr string) {
 	r := chi.NewRouter()
-	r.Get("/ws", wsHandler)
+	r.Get("/___gTl___/ws", wsHandler)
 	r.NotFound(httpToWebSocketHandler)
 
 	log.Println("Server listening on", addr)

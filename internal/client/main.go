@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/B-AJ-Amar/gTunnel/internal/models"
+	"github.com/B-AJ-Amar/gTunnel/internal/client/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -27,12 +27,17 @@ func ClientHTTPRequestHandler(message protocol.HTTPRequestMessage, conn *websock
 
 func WsClientHandler(WsUrl url.URL) {
     // Connect to the WebSocket server
-    conn, _, err := websocket.DefaultDialer.Dial(WsUrl.String(), nil)
+	id := uuid.New().String()
+	// Add the id as a query param to the WebSocket URL
+	q := WsUrl.Query()
+	q.Set("id", id)
+	WsUrl.RawQuery = q.Encode()
+	log.Println("Connecting to WebSocket server at:", WsUrl.String())
+	conn, _, err := websocket.DefaultDialer.Dial(WsUrl.String(), nil)
     if err != nil {
         log.Fatal("Dial error:", err)
     }
 
-    id := uuid.New().String()
 	tunnel := &models.ClientTunnelConn{
 		ID:         id,
 		Conn:       conn,

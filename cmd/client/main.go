@@ -12,7 +12,7 @@ func main() {
 	u := url.URL{
 		Scheme:   "ws",
 		Host:     "localhost:8080",
-		Path:     "/ws",
+		Path:     "/___gTl___/ws",
 	}
 	q := u.Query()
 	q.Set("baseUrl", "/base_url")

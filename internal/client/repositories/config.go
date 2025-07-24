@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/B-AJ-Amar/gTunnel/internal/models"
+	"github.com/B-AJ-Amar/gTunnel/internal/client/models"
 )
 
 type ConfigRepo struct {
