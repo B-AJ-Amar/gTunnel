@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/B-AJ-Amar/gTunnel/internal/client/handlers"
 	"github.com/B-AJ-Amar/gTunnel/internal/client/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/google/uuid"
@@ -16,14 +17,6 @@ var (
     connMu      sync.Mutex
 )
 
-
-func ClientHTTPResponseHandler(message protocol.HTTPResponseMessage, conn *websocket.Conn){
-	
-}
-
-func ClientHTTPRequestHandler(message protocol.HTTPRequestMessage, conn *websocket.Conn){
-
-}
 
 func WsClientHandler(WsUrl url.URL) {
     // Connect to the WebSocket server
@@ -41,7 +34,6 @@ func WsClientHandler(WsUrl url.URL) {
 	tunnel := &models.ClientTunnelConn{
 		ID:         id,
 		Conn:       conn,
-		ResponseCh: make(chan []byte),
 		Port:       WsUrl.Port(), 
 	}
     log.Printf("New connection established: %s", id)
@@ -103,36 +95,21 @@ func WsClientHandler(WsUrl url.URL) {
 
 		// Handle the message based on its type
 		switch socketMessage.Type {
+
 			case protocol.MessageTypeHTTPRequest:
-				var httpRequest protocol.HTTPRequestMessage
-				err = protocol.DeserializeMessage(socketMessage.Payload, &httpRequest)
+				err := handlers.ClientHTTPRequestHandler(socketMessage, tunnel) 
 				if err != nil {
-					log.Printf("[%s] Error deserializing HTTP request: %v", id, err)
+					log.Printf("[%s] Error handling HTTP request: %v", id, err)
 					continue
 				}
-				log.Printf("[%s] HTTP Request: %s %s", id, httpRequest.Method, httpRequest.URL)
-				ClientHTTPRequestHandler(httpRequest, conn)
-			case protocol.MessageTypeHTTPResponse:
-				var httpResponse protocol.HTTPResponseMessage
-				err = protocol.DeserializeMessage(socketMessage.Payload, &httpResponse)
-				if err != nil {
-					log.Printf("[%s] Error deserializing HTTP response: %v", id, err)
-					continue
-				}
-				log.Printf("[%s] HTTP Response: %d", id, httpResponse.StatusCode)
-				ClientHTTPResponseHandler(httpResponse, conn)
+				log.Printf("[%s] HTTP response Sent Successfuly", id)
+
 			default:
 				log.Printf("[%s] Unknown message type: %d", id, socketMessage.Type)
 				continue
 		}
 
 
-		// Send to response channel (non-blocking)
-		select {
-		case tunnel.ResponseCh <- message:
-		default:
-			log.Printf("[%s] WARNING: Dropping message - no listener waiting", id)
-		}
 	}
 
 

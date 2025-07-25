@@ -16,7 +16,7 @@ func PathTunnelRouter(r *http.Request, connections map[string]*models.ServerTunn
 	if len(parts) < 2 {
 		return nil
 	}
-	appID := parts[1]
+	appID := "/" + parts[1]
 	log.Printf("PathTunnelRouter: Extracted appID: %s", appID)
 
 	// ? i will use an indexed db later

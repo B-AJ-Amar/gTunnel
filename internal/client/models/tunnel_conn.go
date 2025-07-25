@@ -7,7 +7,7 @@ import (
 type ClientTunnelConn struct {
 	ID         string
 	Conn       *websocket.Conn
-	ResponseCh chan []byte
 	Port       string
+	// Host       string
 }
 
