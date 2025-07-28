@@ -40,6 +40,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	// if base url is empty , generate random base url e,.g /app-1
 	if baseURL == "" {
 		baseURL = "/app-" + strings.Split(id, "-")[4] // simple example, can be improved
+		// baseURL = "/app"// !! JUST FOR DEV
 		log.Printf("Generated base URL: %s", baseURL)
 	}
 
@@ -105,7 +106,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 
-	tunnel := PathTunnelRouter(r, connections)
+	tunnel,appID,_ := PathTunnelRouter(r, connections)
 
 	if tunnel == nil {
 		http.Error(w, "No tunnel connected", http.StatusServiceUnavailable)
@@ -119,9 +120,10 @@ func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
+	new_url := strings.Replace(r.URL.String(), appID, "", 1)
 	reqMsg := protocol.HTTPRequestMessage{
 		Method:  r.Method,
-		URL:     r.URL.String(),
+		URL:     new_url,
 		Headers: map[string]string{},
 		Body:    body,
 	}
@@ -143,6 +145,7 @@ func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	encoded, err := protocol.SerializeMessage(fullMsg)
+
 	if err != nil {
 		http.Error(w, "Message encoding failed", http.StatusInternalServerError)
 		return

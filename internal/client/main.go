@@ -34,7 +34,7 @@ func WsClientHandler(WsUrl url.URL) {
 	tunnel := &models.ClientTunnelConn{
 		ID:         id,
 		Conn:       conn,
-		Port:       WsUrl.Port(), 
+		Port:       "3000", // for test
 	}
     log.Printf("New connection established: %s", id)
 

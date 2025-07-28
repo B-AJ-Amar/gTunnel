@@ -34,3 +34,5 @@ go.work.sum
 *.todo
 tmp/
 docs/
+
+__pycache__/

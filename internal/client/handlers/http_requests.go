@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"encoding/base64"
 	"io"
 	"log"
 	"net/http"
@@ -21,17 +20,11 @@ func ClientHTTPRequestHandler(socketMessage protocol.SocketMessage, tunnel *mode
 	}
 	log.Printf("HTTP Request: %s %s", httpRequest.Method, httpRequest.URL)
 
-	// Decode base64 body
-	bodyBytes, err := base64.StdEncoding.DecodeString(string(httpRequest.Body))
+    // request
+	req, err := http.NewRequest(httpRequest.Method, "http://localhost:"+ tunnel.Port  + httpRequest.URL, bytes.NewReader(httpRequest.Body))
 	if err != nil {
 		return err
 	}
-
-    // request
-    req, err := http.NewRequest(httpRequest.Method, "http://localhost:"+ tunnel.Port  + httpRequest.URL, bytes.NewReader(bodyBytes))
-    if err != nil {
-        return err
-    }
 
     // Set headers
     for key, value := range httpRequest.Headers {
