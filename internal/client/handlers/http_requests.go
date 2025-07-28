@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -21,7 +22,11 @@ func ClientHTTPRequestHandler(socketMessage protocol.SocketMessage, tunnel *mode
 	log.Printf("HTTP Request: %s %s", httpRequest.Method, httpRequest.URL)
 
     // request
-	req, err := http.NewRequest(httpRequest.Method, "http://localhost:"+ tunnel.Port  + httpRequest.URL, bytes.NewReader(httpRequest.Body))
+	req, err := http.NewRequest(
+		httpRequest.Method,
+		fmt.Sprintf("http://%s:%s%s", tunnel.Host, tunnel.Port, httpRequest.URL),
+		bytes.NewReader(httpRequest.Body),
+	)
 	if err != nil {
 		return err
 	}

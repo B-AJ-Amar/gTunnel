@@ -8,6 +8,6 @@ type ClientTunnelConn struct {
 	ID         string
 	Conn       *websocket.Conn
 	Port       string
-	// Host       string
+	Host       string
 }
 

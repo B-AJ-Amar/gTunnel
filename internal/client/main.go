@@ -35,6 +35,7 @@ func WsClientHandler(WsUrl url.URL) {
 		ID:         id,
 		Conn:       conn,
 		Port:       "3000", // for test
+		Host:       "localhost",
 	}
     log.Printf("New connection established: %s", id)
 
