@@ -2,6 +2,6 @@ package models
 
 
 type ClientConfig struct {
-    AccessToken string `json:"access_token"`
-    ServerURL   string `json:"server_url"`
+    AccessToken string `mapstructure:"access_token"`
+    ServerURL   string `mapstructure:"server_url"`
 }

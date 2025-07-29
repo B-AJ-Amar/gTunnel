@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/client"
+	"github.com/B-AJ-Amar/gTunnel/internal/client/repositories"
 	"github.com/spf13/cobra"
 )
 
@@ -23,13 +24,36 @@ You can specify the tunnel target in two ways:
   - Port only: connect 3000 (defaults to localhost:3000)
   - Host and port: connect myapp.local:3000
 
+The server URL is loaded from configuration. Use 'gtc config --set-url <url>' to set it.
+
 Examples:
-  gtc connect 3000                                           # Tunnel to localhost:3000
-  gtc connect api.example.com:8080                           # Tunnel to api.example.com:8080
-  gtc connect -u example.com:9000/tunnel/ws 3000        # Connect to custom server URL`,
+  gtc connect 3000                                              # Tunnel to localhost:3000
+  gtc connect api.example.com:8080                              # Tunnel to api.example.com:8080
+  gtc connect -u ws://example.com:9000/tunnel/ws 3000           # Override server URL for this connection`,
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		target := args[0]
+		
+		// Initialize config repository
+		configRepo := repositories.NewConfigRepo()
+		if err := configRepo.InitConfig(); err != nil {
+			log.Fatalf("Failed to initialize config: %v", err)
+		}
+		
+		// Determine server URL - use flag if provided, otherwise load from config
+		var finalServerUrl string
+		if serverUrl != "" {
+			finalServerUrl = serverUrl
+		} else {
+			config, err := configRepo.Load()
+			if err != nil {
+				log.Fatalf("Failed to load config: %v", err)
+			}
+			finalServerUrl = config.ServerURL
+			if finalServerUrl == "" {
+				log.Fatal("No server URL provided. Use --server-url flag or set it in config with 'gtc config --set-url <url>'")
+			}
+		}
 		
 		// Parse the target argument to extract host and port
 		var tunnelHost, tunnelPort string
@@ -45,12 +69,12 @@ Examples:
 		}
 		
 		// Parse the server URL
-		u, err := url.Parse(serverUrl)
+		u, err := url.Parse(finalServerUrl)
 		if err != nil {
 			log.Fatalf("Invalid server URL: %v", err)
 		}
 		
-		log.Printf("Connecting to server at %s...\n", serverUrl)
+		log.Printf("Connecting to server at %s...\n", finalServerUrl)
 		log.Printf("Tunneling %s:%s...\n", tunnelHost, tunnelPort)
 		
 		if baseUrl != "" {
