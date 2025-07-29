@@ -18,7 +18,7 @@ var (
 )
 
 
-func WsClientHandler(WsUrl url.URL) {
+func WsClientHandler(WsUrl url.URL, tunnelHost, tunnelPort string) {
     // Connect to the WebSocket server
 	id := uuid.New().String()
 	// Add the id as a query param to the WebSocket URL
@@ -34,8 +34,8 @@ func WsClientHandler(WsUrl url.URL) {
 	tunnel := &models.ClientTunnelConn{
 		ID:         id,
 		Conn:       conn,
-		Port:       "3000", // for test
-		Host:       "localhost",
+		Port:       tunnelPort,
+		Host:       tunnelHost,
 	}
     log.Printf("New connection established: %s", id)
 
@@ -116,6 +116,6 @@ func WsClientHandler(WsUrl url.URL) {
 
 }
 
-func StartClient(WsUrl url.URL) {
-	WsClientHandler(WsUrl)
+func StartClient(WsUrl url.URL, tunnelHost, tunnelPort string) {
+	WsClientHandler(WsUrl, tunnelHost, tunnelPort)
 }

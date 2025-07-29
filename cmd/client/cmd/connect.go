@@ -1,31 +1,57 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"net/url"
+	"strings"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/client"
 	"github.com/spf13/cobra"
 )
 
 var (
-	serverHost string
-	serverPort int
-	basePath   string
-	baseUrl    string
+	serverUrl string
+	baseUrl   string
 )
 
 var connectCmd = &cobra.Command{
-	Use:   "connect",
+	Use:   "connect <port|host:port>",
 	Short: "Connect to a gTunnel server",
+	Long: `Connect to a gTunnel server and tunnel traffic to a local service.
+
+You can specify the tunnel target in two ways:
+  - Port only: connect 3000 (defaults to localhost:3000)
+  - Host and port: connect myapp.local:3000
+
+Examples:
+  gtc connect 3000                                           # Tunnel to localhost:3000
+  gtc connect api.example.com:8080                           # Tunnel to api.example.com:8080
+  gtc connect -u example.com:9000/tunnel/ws 3000        # Connect to custom server URL`,
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Connecting to server at %s:%d...\n", serverHost, serverPort)
+		target := args[0]
 		
-		u := url.URL{
-			Scheme: "ws",
-			Host:   fmt.Sprintf("%s:%d", serverHost, serverPort),
-			Path:   basePath,
+		// Parse the target argument to extract host and port
+		var tunnelHost, tunnelPort string
+		if strings.Contains(target, ":") {
+			// host:port format
+			parts := strings.SplitN(target, ":", 2)
+			tunnelHost = parts[0]
+			tunnelPort = parts[1]
+		} else {
+			// port only format
+			tunnelHost = "localhost"
+			tunnelPort = target
 		}
+		
+		// Parse the server URL
+		u, err := url.Parse(serverUrl)
+		if err != nil {
+			log.Fatalf("Invalid server URL: %v", err)
+		}
+		
+		log.Printf("Connecting to server at %s...\n", serverUrl)
+		log.Printf("Tunneling %s:%s...\n", tunnelHost, tunnelPort)
 		
 		if baseUrl != "" {
 			q := u.Query()
@@ -33,13 +59,13 @@ var connectCmd = &cobra.Command{
 			u.RawQuery = q.Encode()
 		}
 		
-		client.StartClient(u)
+		client.StartClient(*u, tunnelHost, tunnelPort)
 	},
 }
 
 func init() {
-	connectCmd.Flags().StringVarP(&serverHost, "host", "H", "localhost", "Server host to connect to")
-	connectCmd.Flags().IntVarP(&serverPort, "port", "p", 8080, "Server port to connect to")
-	connectCmd.Flags().StringVarP(&basePath, "path", "P", "/___gTl___/ws", "WebSocket path on the server")
-	connectCmd.Flags().StringVarP(&baseUrl, "base-url", "b", "/base_url", "Base URL for the tunnel")
+	// url should not have a default value , thats a temp solution untill i setup the config file
+	// connectCmd.Flags().StringVarP(&serverUrl, "url", "u", "localhost:8080/___gTl___/ws", "Server WebSocket URL to connect to")
+	connectCmd.Flags().StringVarP(&serverUrl, "server-url", "u", "", "Server WebSocket URL to connect to")
+	connectCmd.Flags().StringVarP(&baseUrl, "route-base-endpoint", "r", "", "Base endpoint path to route the tunneled app")
 }
