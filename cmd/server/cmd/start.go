@@ -20,5 +20,5 @@ var startCmd = &cobra.Command{
 
 func init() {
 	startCmd.Flags().IntVarP(&port, "port", "p", 5780, "Port to run the server on")
-	
+
 }

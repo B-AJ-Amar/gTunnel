@@ -21,7 +21,7 @@ func ClientHTTPRequestHandler(socketMessage protocol.SocketMessage, tunnel *mode
 	}
 	log.Printf("HTTP Request: %s %s", httpRequest.Method, httpRequest.URL)
 
-    // request
+	// request
 	req, err := http.NewRequest(
 		httpRequest.Method,
 		fmt.Sprintf("http://%s:%s%s", tunnel.Host, tunnel.Port, httpRequest.URL),
@@ -31,10 +31,10 @@ func ClientHTTPRequestHandler(socketMessage protocol.SocketMessage, tunnel *mode
 		return err
 	}
 
-    // Set headers
-    for key, value := range httpRequest.Headers {
-        req.Header.Set(key, value)
-    }
+	// Set headers
+	for key, value := range httpRequest.Headers {
+		req.Header.Set(key, value)
+	}
 
 	// Send request
 	client := &http.Client{}
@@ -44,38 +44,36 @@ func ClientHTTPRequestHandler(socketMessage protocol.SocketMessage, tunnel *mode
 	}
 	defer resp.Body.Close()
 
-
 	// Construct HTTPResponseMessage
 
-    respBody, err := io.ReadAll(resp.Body)
-    if err != nil {
-        return err
-    }
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
 
-    respHeaders := make(map[string]string)
-    for k, v := range resp.Header {
-        if len(v) > 0 {
-            respHeaders[k] = v[0]
-        }
-    }
+	respHeaders := make(map[string]string)
+	for k, v := range resp.Header {
+		if len(v) > 0 {
+			respHeaders[k] = v[0]
+		}
+	}
 
-    response := protocol.HTTPResponseMessage{
-        StatusCode: resp.StatusCode,
-        Headers:    respHeaders,
-        Body:       respBody, 
-    }
+	response := protocol.HTTPResponseMessage{
+		StatusCode: resp.StatusCode,
+		Headers:    respHeaders,
+		Body:       respBody,
+	}
 
-    responsePayload, err := protocol.SerializeMessage(response)
-    if err != nil {
-        return err
-    }
+	responsePayload, err := protocol.SerializeMessage(response)
+	if err != nil {
+		return err
+	}
 
-    responseMsg := protocol.SocketMessage{
-        // ID:      socketMessage.ID, // reply to the same ID
-        Type:    protocol.MessageTypeHTTPResponse,
-        Payload: responsePayload,
-    }	
-
+	responseMsg := protocol.SocketMessage{
+		// ID:      socketMessage.ID, // reply to the same ID
+		Type:    protocol.MessageTypeHTTPResponse,
+		Payload: responsePayload,
+	}
 
 	// Serialize the response message
 	responseBytes, err := protocol.SerializeMessage(responseMsg)
@@ -86,5 +84,5 @@ func ClientHTTPRequestHandler(socketMessage protocol.SocketMessage, tunnel *mode
 
 	tunnel.Conn.WriteMessage(websocket.TextMessage, responseBytes)
 
-    return nil
+	return nil
 }

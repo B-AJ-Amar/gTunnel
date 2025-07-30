@@ -14,8 +14,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-
-
 var (
 	connections = make(map[string]*models.ServerTunnelConn)
 	connMu      sync.Mutex
@@ -27,10 +25,9 @@ var upgrader = websocket.Upgrader{
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 
-
 	id := r.URL.Query().Get("id")
 	baseURL := r.URL.Query().Get("base_url")
-	
+
 	log.Printf("WebSocket connection request: id=%s, baseURL=%s", id, baseURL)
 	if id == "" {
 		http.Error(w, "Missing 'id' query parameter", http.StatusBadRequest)
@@ -55,14 +52,13 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	connMu.Unlock()
 
-
 	conn, err := upgrader.Upgrade(w, r, nil)
-	
+
 	if err != nil {
 		log.Println("Upgrade error:", err)
 		return
 	}
-	
+
 	tunnel := &models.ServerTunnelConn{
 		ID:         id,
 		Conn:       conn,
@@ -83,7 +79,6 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		conn.Close()
 		log.Printf("Connection closed: %s", id)
 	}()
-
 
 	// WebSocket read loop
 	for {
@@ -106,7 +101,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 
-	tunnel,appID,_ := PathTunnelRouter(r, connections)
+	tunnel, appID, _ := PathTunnelRouter(r, connections)
 
 	if tunnel == nil {
 		http.Error(w, "No tunnel connected", http.StatusServiceUnavailable)
@@ -187,7 +182,6 @@ func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Tunnel response timeout", http.StatusGatewayTimeout)
 	}
 }
-
 
 func StartServer(addr string) {
 	r := chi.NewRouter()

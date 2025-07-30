@@ -11,9 +11,9 @@ const (
 	MessageTypeHTTPRequest  MessageType = 1
 	MessageTypeHTTPResponse MessageType = 2
 
-	MessageTypeConnectionRequest MessageType = 3
+	MessageTypeConnectionRequest  MessageType = 3
 	MessageTypeConnectionResponse MessageType = 4
-	
+
 	MessaageTypeConfigRequest MessageType = 5
 	MessageTypeConfigResponse MessageType = 6
 	MessageTypeError          MessageType = 7
@@ -22,8 +22,8 @@ const (
 // SocketMessage is a generic message that wraps different message types based on Type.
 type SocketMessage struct {
 	// ID      string            `json:"ID"` // ? to add : connection id
-	Type    MessageType       `json:"type"`
-	Payload json.RawMessage   `json:"payload"`
+	Type    MessageType     `json:"type"`
+	Payload json.RawMessage `json:"payload"`
 }
 
 // HTTPRequestMessage represents an HTTP request sent from client to server.
@@ -41,10 +41,6 @@ type HTTPResponseMessage struct {
 	Body       []byte            `json:"body"`
 }
 
-
-
-
-
 // NewHTTPRequestMessage creates a SocketMessage for an HTTP request
 func NewHTTPRequestMessage(id, method, url string, headers map[string]string, body []byte) (*SocketMessage, error) {
 	httpReq := HTTPRequestMessage{
@@ -53,7 +49,7 @@ func NewHTTPRequestMessage(id, method, url string, headers map[string]string, bo
 		Headers: headers,
 		Body:    body,
 	}
-	
+
 	return NewSocketMessage(id, MessageTypeHTTPRequest, httpReq)
 }
 
@@ -64,10 +60,9 @@ func NewHTTPResponseMessage(id string, statusCode int, headers map[string]string
 		Headers:    headers,
 		Body:       body,
 	}
-	
+
 	return NewSocketMessage(id, MessageTypeHTTPResponse, httpResp)
 }
-
 
 // NewSocketMessage creates a new SocketMessage with the given type and payload
 func NewSocketMessage(id string, msgType MessageType, payload interface{}) (*SocketMessage, error) {
@@ -75,14 +70,13 @@ func NewSocketMessage(id string, msgType MessageType, payload interface{}) (*Soc
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return &SocketMessage{
 		// ID:      id,
 		Type:    msgType,
 		Payload: payloadBytes,
 	}, nil
 }
-
 
 // GetPayload extracts and deserializes the payload into the provided interface
 func (sm *SocketMessage) GetPayload(v interface{}) error {
@@ -101,6 +95,3 @@ func SerializeMessage(v interface{}) ([]byte, error) {
 func DeserializeMessage(data []byte, v interface{}) error {
 	return json.Unmarshal(data, v)
 }
-
-
-

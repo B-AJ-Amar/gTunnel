@@ -26,12 +26,12 @@ Examples:
   gtc config --set-token abc123                     # Set access token`,
 	Run: func(cmd *cobra.Command, args []string) {
 		configRepo := repositories.NewConfigRepo()
-		
+
 		// Initialize config if it doesn't exist
 		if err := configRepo.InitConfig(); err != nil {
 			log.Fatalf("Failed to initialize config: %v", err)
 		}
-		
+
 		// Handle different operations
 		if setUrl != "" {
 			if err := configRepo.UpdateServerURL(setUrl); err != nil {
@@ -40,7 +40,7 @@ Examples:
 			fmt.Printf("Server URL updated to: %s\n", setUrl)
 			return
 		}
-		
+
 		if setToken != "" {
 			if err := configRepo.UpdateAccessToken(setToken); err != nil {
 				log.Fatalf("Failed to update access token: %v", err)
@@ -48,13 +48,13 @@ Examples:
 			fmt.Println("Access token updated successfully")
 			return
 		}
-		
+
 		// Show configuration (default behavior)
 		config, err := configRepo.Load()
 		if err != nil {
 			log.Fatalf("Failed to load config: %v", err)
 		}
-		
+
 		fmt.Printf("Configuration file: %s\n", configRepo.GetConfigPath())
 		fmt.Printf("Server URL: %s\n", config.ServerURL)
 		if config.AccessToken != "" {

@@ -8,9 +8,9 @@ import (
 )
 
 var completionCmd = &cobra.Command{
-	Use:   "completion [bash|zsh|fish|powershell]",
-	Short: "Generate shell autocompletion script",
-	Args:  cobra.ExactValidArgs(1),
+	Use:       "completion [bash|zsh|fish|powershell]",
+	Short:     "Generate shell autocompletion script",
+	Args:      cobra.ExactValidArgs(1),
 	ValidArgs: []string{"bash", "zsh", "fish", "powershell"},
 	Run: func(cmd *cobra.Command, args []string) {
 		switch args[0] {

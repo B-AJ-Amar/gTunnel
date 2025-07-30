@@ -5,9 +5,8 @@ import (
 )
 
 type ClientTunnelConn struct {
-	ID         string
-	Conn       *websocket.Conn
-	Port       string
-	Host       string
+	ID   string
+	Conn *websocket.Conn
+	Port string
+	Host string
 }
-

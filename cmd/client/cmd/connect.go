@@ -30,16 +30,16 @@ Examples:
   gtc connect 3000                                              # Tunnel to localhost:3000
   gtc connect api.example.com:8080                              # Tunnel to api.example.com:8080
   gtc connect -u ws://example.com:9000/tunnel/ws 3000           # Override server URL for this connection`,
-	Args:  cobra.ExactArgs(1),
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		target := args[0]
-		
+
 		// Initialize config repository
 		configRepo := repositories.NewConfigRepo()
 		if err := configRepo.InitConfig(); err != nil {
 			log.Fatalf("Failed to initialize config: %v", err)
 		}
-		
+
 		// Determine server URL - use flag if provided, otherwise load from config
 		var finalServerUrl string
 		if serverUrl != "" {
@@ -54,7 +54,7 @@ Examples:
 				log.Fatal("No server URL provided. Use --server-url flag or set it in config with 'gtc config --set-url <url>'")
 			}
 		}
-		
+
 		// Parse the target argument to extract host and port
 		var tunnelHost, tunnelPort string
 		if strings.Contains(target, ":") {
@@ -67,22 +67,22 @@ Examples:
 			tunnelHost = "localhost"
 			tunnelPort = target
 		}
-		
+
 		// Parse the server URL
 		u, err := url.Parse(finalServerUrl)
 		if err != nil {
 			log.Fatalf("Invalid server URL: %v", err)
 		}
-		
+
 		log.Printf("Connecting to server at %s...\n", finalServerUrl)
 		log.Printf("Tunneling %s:%s...\n", tunnelHost, tunnelPort)
-		
+
 		if baseUrl != "" {
 			q := u.Query()
 			q.Set("baseUrl", baseUrl)
 			u.RawQuery = q.Encode()
 		}
-		
+
 		client.StartClient(*u, tunnelHost, tunnelPort)
 	},
 }
