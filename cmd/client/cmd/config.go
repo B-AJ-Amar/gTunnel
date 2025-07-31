@@ -10,7 +10,7 @@ import (
 
 var (
 	showConfig bool
-	setUrl     string
+	setURL     string
 	setToken   string
 )
 
@@ -33,11 +33,11 @@ Examples:
 		}
 
 		// Handle different operations
-		if setUrl != "" {
-			if err := configRepo.UpdateServerURL(setUrl); err != nil {
+		if setURL != "" {
+			if err := configRepo.UpdateServerURL(setURL); err != nil {
 				log.Fatalf("Failed to update server URL: %v", err)
 			}
-			fmt.Printf("Server URL updated to: %s\n", setUrl)
+			fmt.Printf("Server URL updated to: %s\n", setURL)
 			return
 		}
 
@@ -65,16 +65,9 @@ Examples:
 	},
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func init() {
 	configCmd.Flags().BoolVarP(&showConfig, "show", "s", false, "Show current configuration")
-	configCmd.Flags().StringVar(&setUrl, "set-url", "", "Set the server WebSocket URL")
+	configCmd.Flags().StringVar(&setURL, "set-url", "", "Set the server WebSocket URL")
 	configCmd.Flags().StringVar(&setToken, "set-token", "", "Set the access token")
 	// TODO: set a config file directly e.g .gtunnle file
 }

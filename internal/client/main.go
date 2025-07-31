@@ -18,15 +18,15 @@ var (
 	connMu      sync.Mutex
 )
 
-func WsClientHandler(WsUrl url.URL, tunnelHost, tunnelPort string) {
+func WsClientHandler(wsURL url.URL, tunnelHost, tunnelPort string) {
 	// Connect to the WebSocket server
 	id := uuid.New().String()
 	// Add the id as a query param to the WebSocket URL
-	q := WsUrl.Query()
+	q := wsURL.Query()
 	q.Set("id", id)
-	WsUrl.RawQuery = q.Encode()
-	log.Println("Connecting to WebSocket server at:", WsUrl.String())
-	conn, _, err := websocket.DefaultDialer.Dial(WsUrl.String(), nil)
+	wsURL.RawQuery = q.Encode()
+	log.Println("Connecting to WebSocket server at:", wsURL.String())
+	conn, _, err := websocket.DefaultDialer.Dial(wsURL.String(), nil)
 	if err != nil {
 		log.Fatal("Dial error:", err)
 	}
@@ -113,6 +113,6 @@ func WsClientHandler(WsUrl url.URL, tunnelHost, tunnelPort string) {
 
 }
 
-func StartClient(WsUrl url.URL, tunnelHost, tunnelPort string) {
-	WsClientHandler(WsUrl, tunnelHost, tunnelPort)
+func StartClient(wsURL url.URL, tunnelHost, tunnelPort string) {
+	WsClientHandler(wsURL, tunnelHost, tunnelPort)
 }

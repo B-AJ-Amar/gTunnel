@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	serverUrl string
-	baseUrl   string
+	serverURL string
+	baseURL   string
 )
 
 var connectCmd = &cobra.Command{
@@ -41,16 +41,16 @@ Examples:
 		}
 
 		// Determine server URL - use flag if provided, otherwise load from config
-		var finalServerUrl string
-		if serverUrl != "" {
-			finalServerUrl = serverUrl
+		var finalServerURL string
+		if serverURL != "" {
+			finalServerURL = serverURL
 		} else {
 			config, err := configRepo.Load()
 			if err != nil {
 				log.Fatalf("Failed to load config: %v", err)
 			}
-			finalServerUrl = config.ServerURL
-			if finalServerUrl == "" {
+			finalServerURL = config.ServerURL
+			if finalServerURL == "" {
 				log.Fatal("No server URL provided. Use --server-url flag or set it in config with 'gtc config --set-url <url>'")
 			}
 		}
@@ -69,17 +69,17 @@ Examples:
 		}
 
 		// Parse the server URL
-		u, err := url.Parse(finalServerUrl)
+		u, err := url.Parse(finalServerURL)
 		if err != nil {
 			log.Fatalf("Invalid server URL: %v", err)
 		}
 
-		log.Printf("Connecting to server at %s...\n", finalServerUrl)
+		log.Printf("Connecting to server at %s...\n", finalServerURL)
 		log.Printf("Tunneling %s:%s...\n", tunnelHost, tunnelPort)
 
-		if baseUrl != "" {
+		if baseURL != "" {
 			q := u.Query()
-			q.Set("baseUrl", baseUrl)
+			q.Set("baseURL", baseURL)
 			u.RawQuery = q.Encode()
 		}
 
@@ -89,7 +89,7 @@ Examples:
 
 func init() {
 	// url should not have a default value , thats a temp solution untill i setup the config file
-	// connectCmd.Flags().StringVarP(&serverUrl, "url", "u", "localhost:8080/___gTl___/ws", "Server WebSocket URL to connect to")
-	connectCmd.Flags().StringVarP(&serverUrl, "server-url", "u", "", "Server WebSocket URL to connect to")
-	connectCmd.Flags().StringVarP(&baseUrl, "route-base-endpoint", "r", "", "Base endpoint path to route the tunneled app")
+	// connectCmd.Flags().StringVarP(&serverURL, "url", "u", "localhost:8080/___gTl___/ws", "Server WebSocket URL to connect to")
+	connectCmd.Flags().StringVarP(&serverURL, "server-url", "u", "", "Server WebSocket URL to connect to")
+	connectCmd.Flags().StringVarP(&baseURL, "route-base-endpoint", "r", "", "Base endpoint path to route the tunneled app")
 }

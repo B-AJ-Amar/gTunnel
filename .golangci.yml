@@ -1,0 +1,18 @@
+run:
+  timeout: 2m
+  tests: true
+
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - gosimple
+    - unused
+    - gocritic
+    - revive
+
+# issues:
+#   exclude-rules:
+#     - path: _test\.go
+#       text: "should have comment"
