@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/B-AJ-Amar/gTunnel/internal/version"
+	version "github.com/B-AJ-Amar/gTunnel/internal/pkg"
 	"github.com/spf13/cobra"
 )
 
