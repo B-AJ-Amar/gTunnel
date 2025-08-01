@@ -4,13 +4,13 @@ package version
 var (
 	// Version is the current version of gTunnel
 	Version = "dev"
-	
+
 	// GitCommit is the git commit hash
 	GitCommit = "unknown"
-	
+
 	// BuildDate is when the binary was built
 	BuildDate = "unknown"
-	
+
 	// GoVersion is the Go version used to build
 	GoVersion = "unknown"
 )

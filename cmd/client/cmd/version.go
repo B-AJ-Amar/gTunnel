@@ -43,6 +43,6 @@ func runVersion(cmd *cobra.Command, args []string) error {
 }
 
 func init() {
-	versionCmd.Flags().StringVarP(&versionOutputFormat, "output", "o", "default", 
+	versionCmd.Flags().StringVarP(&versionOutputFormat, "output", "o", "default",
 		"Output format. One of: default|json|short")
 }

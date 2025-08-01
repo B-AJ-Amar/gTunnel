@@ -41,6 +41,17 @@ type HTTPResponseMessage struct {
 	Body       []byte            `json:"body"`
 }
 
+type AuthRequestMessage struct {
+	AccessToken string `json:"access_token"`
+	BaseURL     string `json:"base_url"`
+}
+
+type AuthResponseMessage struct {
+	ID      *string `json:"id,omitempty"`
+	Success bool    `json:"success,omitempty"`
+	Message string  `json:"error,omitempty"` // Optional error message if success is false
+}
+
 // NewHTTPRequestMessage creates a SocketMessage for an HTTP request
 func NewHTTPRequestMessage(id, method, url string, headers map[string]string, body []byte) (*SocketMessage, error) {
 	httpReq := HTTPRequestMessage{
