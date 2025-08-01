@@ -25,7 +25,7 @@ Examples:
   gtc config --set-url ws://example.com:8080/ws    # Set server URL
   gtc config --set-token abc123                     # Set access token`,
 	Run: func(cmd *cobra.Command, args []string) {
-		configRepo := repositories.NewConfigRepo()
+		configRepo := repositories.NewClientConfigRepo()
 
 		// Initialize config if it doesn't exist
 		if err := configRepo.InitConfig(); err != nil {

@@ -35,7 +35,7 @@ Examples:
 		target := args[0]
 
 		// Initialize config repository
-		configRepo := repositories.NewConfigRepo()
+		configRepo := repositories.NewClientConfigRepo()
 		if err := configRepo.InitConfig(); err != nil {
 			log.Fatalf("Failed to initialize config: %v", err)
 		}
