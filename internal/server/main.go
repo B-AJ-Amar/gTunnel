@@ -7,6 +7,7 @@ import (
 
 	"github.com/B-AJ-Amar/gTunnel/internal/server/handlers"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
+	"github.com/B-AJ-Amar/gTunnel/internal/server/sec"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -50,12 +51,23 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tunnel := handlers.SaveTunnel(id, baseURL, conn, connections, &connMu)
+	tunnel := handlers.SaveTunnel(conn, authenticating, &connMu)
 
-	defer handlers.TunnelCleanup(id, conn, connections, &connMu)()
+	success, err := sec.HandleWSAuth(tunnel, r, authenticating, &authMu, connections, &connMu)
+
+	if err != nil {
+		log.Println("Authentication error:", err)
+		return
+	}
+	if !success {
+		log.Println("Authentication failed for tunnel:", id)
+		return
+	}
 
 	// Handle WebSocket messages
 	handlers.HandleWSMessages(tunnel)
+
+	handlers.TunnelCleanup(id, conn, connections, &connMu)()
 }
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
