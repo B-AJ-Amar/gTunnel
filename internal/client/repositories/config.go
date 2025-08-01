@@ -15,7 +15,7 @@ const (
 	appName    = "gtunnel"
 )
 
-type ConfigRepository interface {
+type ClientConfigRepository interface {
 	// creates config file if it doesn't exist
 	InitConfig() error
 
@@ -36,12 +36,12 @@ type ConfigRepository interface {
 	GetConfigPath() string
 }
 
-type ConfigRepo struct {
+type ClientConfigRepo struct {
 	configPath string
 }
 
-// NewConfigRepo creates a new ConfigRepository implementation using Viper
-func NewConfigRepo() ConfigRepository {
+// NewClientConfigRepo creates a new ClientConfigRepository implementation using Viper
+func NewClientConfigRepo() ClientConfigRepository {
 	// Determine platform-specific config path
 	configDir, err := os.UserConfigDir()
 	if err != nil {
@@ -50,10 +50,10 @@ func NewConfigRepo() ConfigRepository {
 	}
 
 	configPath := filepath.Join(configDir, appName)
-	return &ConfigRepo{configPath: configPath}
+	return &ClientConfigRepo{configPath: configPath}
 }
 
-func (r *ConfigRepo) InitConfig() error {
+func (r *ClientConfigRepo) InitConfig() error {
 	// Create the config directory if it doesn't exist
 	if err := os.MkdirAll(r.configPath, 0755); err != nil {
 		return fmt.Errorf("could not create config directory: %w", err)
@@ -72,7 +72,7 @@ func (r *ConfigRepo) InitConfig() error {
 			// Set default values
 			defaultConfig := &models.ClientConfig{
 				AccessToken: "",
-				ServerURL:   "localhost:8080/___gTl___/ws",
+				ServerURL:   "ws://localhost:5780/___gTl___/ws",
 			}
 
 			// Create the config file with defaults
@@ -89,7 +89,7 @@ func (r *ConfigRepo) InitConfig() error {
 	return nil
 }
 
-func (r *ConfigRepo) Load() (*models.ClientConfig, error) {
+func (r *ClientConfigRepo) Load() (*models.ClientConfig, error) {
 	var config models.ClientConfig
 
 	if err := viper.Unmarshal(&config); err != nil {
@@ -99,11 +99,11 @@ func (r *ConfigRepo) Load() (*models.ClientConfig, error) {
 	return &config, nil
 }
 
-func (r *ConfigRepo) Save(config *models.ClientConfig) error {
+func (r *ClientConfigRepo) Save(config *models.ClientConfig) error {
 	return r.SetConfig(config)
 }
 
-func (r *ConfigRepo) SetConfig(config *models.ClientConfig) error {
+func (r *ClientConfigRepo) SetConfig(config *models.ClientConfig) error {
 	if config == nil {
 		return fmt.Errorf("config is nil")
 	}
@@ -122,7 +122,7 @@ func (r *ConfigRepo) SetConfig(config *models.ClientConfig) error {
 	return nil
 }
 
-func (r *ConfigRepo) UpdateAccessToken(token string) error {
+func (r *ClientConfigRepo) UpdateAccessToken(token string) error {
 	config, err := r.Load()
 	if err != nil {
 		return err
@@ -131,7 +131,7 @@ func (r *ConfigRepo) UpdateAccessToken(token string) error {
 	return r.SetConfig(config)
 }
 
-func (r *ConfigRepo) UpdateServerURL(url string) error {
+func (r *ClientConfigRepo) UpdateServerURL(url string) error {
 	config, err := r.Load()
 	if err != nil {
 		return err
@@ -140,7 +140,7 @@ func (r *ConfigRepo) UpdateServerURL(url string) error {
 	return r.SetConfig(config)
 }
 
-func (r *ConfigRepo) SetConfigValue(key string, value interface{}) error {
+func (r *ClientConfigRepo) SetConfigValue(key string, value interface{}) error {
 	viper.Set(key, value)
 
 	if err := viper.WriteConfig(); err != nil {
@@ -150,6 +150,6 @@ func (r *ConfigRepo) SetConfigValue(key string, value interface{}) error {
 	return nil
 }
 
-func (r *ConfigRepo) GetConfigPath() string {
+func (r *ClientConfigRepo) GetConfigPath() string {
 	return filepath.Join(r.configPath, configName+"."+configType)
 }

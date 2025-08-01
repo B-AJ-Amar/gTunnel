@@ -11,8 +11,8 @@ const (
 	MessageTypeHTTPRequest  MessageType = 1
 	MessageTypeHTTPResponse MessageType = 2
 
-	MessageTypeConnectionRequest  MessageType = 3
-	MessageTypeConnectionResponse MessageType = 4
+	MessageTypeAuthRequest  MessageType = 3
+	MessageTypeAuthResponse MessageType = 4
 
 	MessaageTypeConfigRequest MessageType = 5
 	MessageTypeConfigResponse MessageType = 6
@@ -76,16 +76,6 @@ func NewSocketMessage(id string, msgType MessageType, payload interface{}) (*Soc
 		Type:    msgType,
 		Payload: payloadBytes,
 	}, nil
-}
-
-// GetPayload extracts and deserializes the payload into the provided interface
-func (sm *SocketMessage) GetPayload(v interface{}) error {
-	return json.Unmarshal(sm.Payload, v)
-}
-
-// ToBytes serializes the SocketMessage to bytes
-func (sm *SocketMessage) ToBytes() ([]byte, error) {
-	return json.Marshal(sm)
 }
 
 func SerializeMessage(v interface{}) ([]byte, error) {
