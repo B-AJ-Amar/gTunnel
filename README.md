@@ -1,6 +1,6 @@
 # gTunnel
 
-**gTunnel** is a lightweight Go-based tunneling system similar to [ngrok](https://ngrok.com/) or [VS Code dev tunnels], allowing you to expose a local port to the
+**gTunnel** is a lightweight Go-based tunneling system similar to [ngrok](https://ngrok.com/) or [VSCode Port-Forwarding](https://code.visualstudio.com/docs/debugtest/port-forwarding), allowing you to expose a local port to the public internet via a secure tunnel through a public relay server.
 
 - 🌐 **Tunnel Server**: Listens publicly and relays traffic
 - 🧑‍💻 **Tunnel Client**: Forwards local traffic to the server
