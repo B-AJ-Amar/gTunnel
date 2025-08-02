@@ -57,10 +57,12 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Println("Authentication error:", err)
+		conn.Close()
 		return
 	}
 	if !success {
 		log.Println("Authentication failed for tunnel:", id)
+		conn.Close()
 		return
 	}
 

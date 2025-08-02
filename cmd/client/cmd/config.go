@@ -67,7 +67,7 @@ Examples:
 
 func init() {
 	configCmd.Flags().BoolVarP(&showConfig, "show", "s", false, "Show current configuration")
-	configCmd.Flags().StringVar(&setURL, "set-url", "", "Set the server WebSocket URL")
-	configCmd.Flags().StringVar(&setToken, "set-token", "", "Set the access token")
+	configCmd.Flags().StringVar(&setURL, "set-url", "u", "Set the server WebSocket URL")
+	configCmd.Flags().StringVar(&setToken, "set-token", "t", "Set the access token")
 	// TODO: set a config file directly e.g .gtunnle file
 }

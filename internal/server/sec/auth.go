@@ -25,7 +25,7 @@ func HandleAuthMessage(msg []byte, tunnel *models.ServerTunnelConn, connections 
 	case protocol.MessageTypeAuthRequest:
 		var authRequest protocol.AuthRequestMessage
 		if err := protocol.DeserializeMessage(socketMsg.Payload, &authRequest); err != nil {
-			log.Printf("Failed to deserialize auth request: %v", err)
+			// Failed to deserialize auth request
 			return false, err
 		}
 		// Handle authentication request

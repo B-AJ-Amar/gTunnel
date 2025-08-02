@@ -27,6 +27,7 @@ type ServerConfigRepository interface {
 	Save(config *models.ServerConfig) error
 	SetConfig(config *models.ServerConfig) error
 	UpdateAccessToken(token string) error
+	UpdatePort(port int) error
 	SetConfigValue(key string, value interface{}) error
 	GetConfigPath() string
 }
@@ -69,6 +70,7 @@ func (r *ServerConfigRepo) InitConfig() error {
 			fmt.Println("No config found. Creating default config...")
 			defaultConfig := &models.ServerConfig{
 				AccessToken: "",
+				Port:        7205, // Set default port
 			}
 			if err := r.SetConfig(defaultConfig); err != nil {
 				return fmt.Errorf("could not create default config: %w", err)
@@ -85,9 +87,22 @@ func (r *ServerConfigRepo) InitConfig() error {
 func (r *ServerConfigRepo) Load() (*models.ServerConfig, error) {
 	var config models.ServerConfig
 
+	// Initialize config first to read the config file
+	if err := r.InitConfig(); err != nil {
+		return nil, fmt.Errorf("failed to initialize config: %w", err)
+	}
+
 	if r.useEnv {
 		viper.AutomaticEnv()
 		_ = viper.BindEnv("access_token", "GTUNNEL_ACCESS_TOKEN")
+		_ = viper.BindEnv("port", "GTUNNEL_PORT")
+		// Set default values for environment mode
+		viper.SetDefault("port", 7205)
+	} else {
+		// Only set default if not in env mode and value is not in config
+		if !viper.IsSet("port") {
+			viper.SetDefault("port", 7205)
+		}
 	}
 
 	if err := viper.Unmarshal(&config); err != nil {
@@ -110,6 +125,7 @@ func (r *ServerConfigRepo) SetConfig(config *models.ServerConfig) error {
 	}
 
 	viper.Set("access_token", config.AccessToken)
+	viper.Set("port", config.Port)
 
 	if err := viper.WriteConfig(); err != nil {
 		if err := viper.SafeWriteConfig(); err != nil {
@@ -129,6 +145,18 @@ func (r *ServerConfigRepo) UpdateAccessToken(token string) error {
 		return err
 	}
 	config.AccessToken = token
+	return r.SetConfig(config)
+}
+
+func (r *ServerConfigRepo) UpdatePort(port int) error {
+	if r.useEnv {
+		return fmt.Errorf("cannot update port in USE_ENV mode")
+	}
+	config, err := r.Load()
+	if err != nil {
+		return err
+	}
+	config.Port = port
 	return r.SetConfig(config)
 }
 
