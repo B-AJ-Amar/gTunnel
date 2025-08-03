@@ -16,13 +16,10 @@ const (
 )
 
 type ClientConfigRepository interface {
-	// creates config file if it doesn't exist
 	InitConfig() error
 
-	// loads the configuration from file into the ClientConfig struct
 	Load() (*models.ClientConfig, error)
 
-	// saves the entire configuration to file
 	Save(config *models.ClientConfig) error
 
 	SetConfig(config *models.ClientConfig) error
@@ -40,7 +37,6 @@ type ClientConfigRepo struct {
 	configPath string
 }
 
-// NewClientConfigRepo creates a new ClientConfigRepository implementation using Viper
 func NewClientConfigRepo() ClientConfigRepository {
 	// Determine platform-specific config path
 	configDir, err := os.UserConfigDir()
@@ -54,7 +50,6 @@ func NewClientConfigRepo() ClientConfigRepository {
 }
 
 func (r *ClientConfigRepo) InitConfig() error {
-	// Create the config directory if it doesn't exist
 	if err := os.MkdirAll(r.configPath, 0755); err != nil {
 		return fmt.Errorf("could not create config directory: %w", err)
 	}
@@ -65,7 +60,6 @@ func (r *ClientConfigRepo) InitConfig() error {
 
 	// Try to read existing config
 	if err := viper.ReadInConfig(); err != nil {
-		// Config file doesn't exist, create it with default values
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			fmt.Println("No existing config file found. Creating default config...")
 

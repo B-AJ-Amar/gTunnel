@@ -39,7 +39,7 @@ Examples:
 			if !strings.HasPrefix(setURL, "ws://") && !strings.HasPrefix(setURL, "wss://") {
 				setURL = "ws://" + setURL
 			}
-			
+
 			if err := configRepo.UpdateServerURL(setURL); err != nil {
 				log.Fatalf("Failed to update server URL: %v", err)
 			}

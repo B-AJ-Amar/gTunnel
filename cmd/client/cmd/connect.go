@@ -82,9 +82,7 @@ Examples:
 		log.Printf("Connecting to server at %s...\n", finalServerURL)
 		log.Printf("Tunneling %s:%s...\n", tunnelHost, tunnelPort)
 
-	
-
-		client.StartClient(*u, tunnelHost, tunnelPort,baseURL)
+		client.StartClient(*u, tunnelHost, tunnelPort, baseURL)
 	},
 }
 

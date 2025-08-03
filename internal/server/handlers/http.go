@@ -12,7 +12,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// HTTPToWebSocketHandler handles HTTP requests and forwards them through WebSocket handler Using channels
 func HTTPToWebSocketHandler(w http.ResponseWriter, r *http.Request, pathTunnelRouter func(*http.Request, map[string]*models.ServerTunnelConn) (*models.ServerTunnelConn, string, string), connections map[string]*models.ServerTunnelConn) {
 	tunnel, appID, _ := pathTunnelRouter(r, connections)
 
@@ -64,7 +63,6 @@ func HTTPToWebSocketHandler(w http.ResponseWriter, r *http.Request, pathTunnelRo
 	}
 	log.Println("HTTPToWebSocketHandler: message sent to tunnel")
 
-	// Wait for response (with timeout)
 	select {
 	case responseData := <-tunnel.ResponseCh:
 		var responseMsg protocol.SocketMessage

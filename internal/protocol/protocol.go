@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 )
 
-// MessageType defines the type of message sent over the websocket.
 type MessageType int
 
 const (
@@ -19,14 +18,12 @@ const (
 	MessageTypeError          MessageType = 7
 )
 
-// SocketMessage is a generic message that wraps different message types based on Type.
 type SocketMessage struct {
 	// ID      string            `json:"ID"` // ? to add : connection id
 	Type    MessageType     `json:"type"`
 	Payload json.RawMessage `json:"payload"`
 }
 
-// HTTPRequestMessage represents an HTTP request sent from client to server.
 type HTTPRequestMessage struct {
 	Method  string            `json:"method"`
 	URL     string            `json:"url"`
@@ -34,7 +31,6 @@ type HTTPRequestMessage struct {
 	Body    []byte            `json:"body"`
 }
 
-// HTTPResponseMessage represents an HTTP response sent from server to client.
 type HTTPResponseMessage struct {
 	StatusCode int               `json:"status_code"`
 	Headers    map[string]string `json:"headers"`
@@ -52,7 +48,6 @@ type AuthResponseMessage struct {
 	Message string  `json:"error,omitempty"` // Optional error message if success is false
 }
 
-// NewHTTPRequestMessage creates a SocketMessage for an HTTP request
 func NewHTTPRequestMessage(id, method, url string, headers map[string]string, body []byte) (*SocketMessage, error) {
 	httpReq := HTTPRequestMessage{
 		Method:  method,
@@ -64,7 +59,6 @@ func NewHTTPRequestMessage(id, method, url string, headers map[string]string, bo
 	return NewSocketMessage(id, MessageTypeHTTPRequest, httpReq)
 }
 
-// NewHTTPResponseMessage creates a SocketMessage for an HTTP response
 func NewHTTPResponseMessage(id string, statusCode int, headers map[string]string, body []byte) (*SocketMessage, error) {
 	httpResp := HTTPResponseMessage{
 		StatusCode: statusCode,
@@ -75,7 +69,6 @@ func NewHTTPResponseMessage(id string, statusCode int, headers map[string]string
 	return NewSocketMessage(id, MessageTypeHTTPResponse, httpResp)
 }
 
-// NewSocketMessage creates a new SocketMessage with the given type and payload
 func NewSocketMessage(id string, msgType MessageType, payload interface{}) (*SocketMessage, error) {
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {

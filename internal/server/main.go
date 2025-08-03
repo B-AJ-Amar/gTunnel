@@ -32,7 +32,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tunnel := handlers.SaveTunnel(conn, authenticating, &connMu)
-	id := tunnel.ID 
+	id := tunnel.ID
 
 	success, err := sec.HandleWSAuth(tunnel, r, authenticating, &authMu, connections, &connMu)
 
@@ -48,14 +48,13 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("authentication SUCCESS")
 
-	// Handle WebSocket messages
 	handlers.HandleWSMessages(tunnel)
 
 	handlers.TunnelCleanup(id, conn, connections, &connMu)()
 }
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
-	// i will add more routers later
+	// TODO: add more routers later
 	handlers.HTTPToWebSocketHandler(w, r, utils.PathTunnelRouter, connections)
 }
 

@@ -9,7 +9,6 @@ import (
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 )
 
-// GenerateBaseURL generates a base URL if one is not provided
 func GenerateBaseURL(baseURL, id string) string {
 	if baseURL == "" {
 		baseURL = "app-" + strings.Split(id, "-")[4] // simple example, can be improved
@@ -19,7 +18,6 @@ func GenerateBaseURL(baseURL, id string) string {
 	return baseURL
 }
 
-// ValidateBaseURLAvailability checks if the baseURL is already in use
 func ValidateBaseURLAvailability(baseURL string, connections map[string]*models.ServerTunnelConn, connMu *sync.Mutex) error {
 	connMu.Lock()
 	defer connMu.Unlock()
@@ -32,7 +30,6 @@ func ValidateBaseURLAvailability(baseURL string, connections map[string]*models.
 	return nil
 }
 
-// ValidateAndExtractParams validates the request parameters and extracts id and baseURL
 func ValidateAndExtractParams(r *http.Request) (string, string, error) {
 	id := r.URL.Query().Get("id")
 	baseURL := r.URL.Query().Get("base_url")
@@ -46,14 +43,11 @@ func ValidateAndExtractParams(r *http.Request) (string, string, error) {
 	return id, baseURL, nil
 }
 
-// ExtractPath extracts the path and query parameters from a URL path
 func ExtractPath(urlPath string) (string, string, error) {
-	// Remove leading slash if present
 	if strings.HasPrefix(urlPath, "/") {
 		urlPath = urlPath[1:]
 	}
 
-	// Split by '?' to separate path and query
 	parts := strings.SplitN(urlPath, "?", 2)
 	path := parts[0]
 	query := ""
