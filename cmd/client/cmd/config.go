@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/client/repositories"
 	"github.com/spf13/cobra"
@@ -34,6 +35,11 @@ Examples:
 
 		// Handle different operations
 		if setURL != "" {
+			// Ensure URL starts with ws:// or wss://
+			if !strings.HasPrefix(setURL, "ws://") && !strings.HasPrefix(setURL, "wss://") {
+				setURL = "ws://" + setURL
+			}
+			
 			if err := configRepo.UpdateServerURL(setURL); err != nil {
 				log.Fatalf("Failed to update server URL: %v", err)
 			}
@@ -67,7 +73,7 @@ Examples:
 
 func init() {
 	configCmd.Flags().BoolVarP(&showConfig, "show", "s", false, "Show current configuration")
-	configCmd.Flags().StringVar(&setURL, "set-url", "u", "Set the server WebSocket URL")
-	configCmd.Flags().StringVar(&setToken, "set-token", "t", "Set the access token")
+	configCmd.Flags().StringVarP(&setURL, "set-url", "u", "", "Set the server WebSocket URL")
+	configCmd.Flags().StringVarP(&setToken, "set-token", "t", "", "Set the access token")
 	// TODO: set a config file directly e.g .gtunnle file
 }

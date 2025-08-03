@@ -55,6 +55,11 @@ Examples:
 			}
 		}
 
+		// Ensure URL starts with ws:// or wss://
+		if !strings.HasPrefix(finalServerURL, "ws://") && !strings.HasPrefix(finalServerURL, "wss://") {
+			finalServerURL = "ws://" + finalServerURL
+		}
+
 		// Parse the target argument to extract host and port
 		var tunnelHost, tunnelPort string
 		if strings.Contains(target, ":") {
