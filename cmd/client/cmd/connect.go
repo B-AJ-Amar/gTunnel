@@ -82,13 +82,9 @@ Examples:
 		log.Printf("Connecting to server at %s...\n", finalServerURL)
 		log.Printf("Tunneling %s:%s...\n", tunnelHost, tunnelPort)
 
-		if baseURL != "" {
-			q := u.Query()
-			q.Set("baseURL", baseURL)
-			u.RawQuery = q.Encode()
-		}
+	
 
-		client.StartClient(*u, tunnelHost, tunnelPort)
+		client.StartClient(*u, tunnelHost, tunnelPort,baseURL)
 	},
 }
 
@@ -96,5 +92,5 @@ func init() {
 	// url should not have a default value , thats a temp solution untill i setup the config file
 	// connectCmd.Flags().StringVarP(&serverURL, "url", "u", "localhost:8080/___gTl___/ws", "Server WebSocket URL to connect to")
 	connectCmd.Flags().StringVarP(&serverURL, "server-url", "u", "", "Server WebSocket URL to connect to")
-	connectCmd.Flags().StringVarP(&baseURL, "route-base-endpoint", "r", "", "Base endpoint path to route the tunneled app")
+	connectCmd.Flags().StringVarP(&baseURL, "base-endpoint", "e", "", "Base endpoint path to route the tunneled app")
 }

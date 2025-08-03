@@ -8,6 +8,7 @@ import (
 	"github.com/B-AJ-Amar/gTunnel/internal/server/handlers"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/sec"
+	"github.com/B-AJ-Amar/gTunnel/internal/server/utils"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -22,28 +23,7 @@ var (
 )
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
-	// Extract and validate parameters
-	id, baseURL, err := ValidateAndExtractParams(r)
-	if err != nil {
-		if validationErr, ok := err.(*ValidationError); ok {
-			http.Error(w, validationErr.Message, validationErr.StatusCode)
-		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		return
-	}
-
-	// Generate base URL if needed
-	baseURL = GenerateBaseURL(baseURL, id)
-
-	if err := ValidateBaseURLAvailability(baseURL, connections, &connMu); err != nil {
-		if validationErr, ok := err.(*ValidationError); ok {
-			http.Error(w, validationErr.Message, validationErr.StatusCode)
-		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		return
-	}
+	// Generate a unique ID for this connection
 
 	// Establish WebSocket connection
 	conn, err := handlers.EstablishWSConn(w, r)
@@ -52,6 +32,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tunnel := handlers.SaveTunnel(conn, authenticating, &connMu)
+	id := tunnel.ID 
 
 	success, err := sec.HandleWSAuth(tunnel, r, authenticating, &authMu, connections, &connMu)
 
@@ -65,6 +46,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		conn.Close()
 		return
 	}
+	log.Println("authentication SUCCESS")
 
 	// Handle WebSocket messages
 	handlers.HandleWSMessages(tunnel)
@@ -73,7 +55,8 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
-	handlers.HTTPToWebSocketHandler(w, r, PathTunnelRouter, connections)
+	// i will add more routers later
+	handlers.HTTPToWebSocketHandler(w, r, utils.PathTunnelRouter, connections)
 }
 
 func StartServer(addr string) {

@@ -10,6 +10,7 @@ import (
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/repositories"
+	"github.com/B-AJ-Amar/gTunnel/internal/server/utils"
 )
 
 // TODO : Handle BaseURL
@@ -28,6 +29,28 @@ func HandleAuthMessage(msg []byte, tunnel *models.ServerTunnelConn, connections 
 			// Failed to deserialize auth request
 			return false, err
 		}
+		
+		// Handle baseURL from auth request
+		baseURL := authRequest.BaseURL
+		if len(baseURL) > 0 && baseURL[0] == '/' {
+			baseURL = baseURL[1:]
+		}
+
+		if baseURL == "" {
+			// Generate base URL if not provided
+			baseURL = utils.GenerateBaseURL("", tunnel.ID)
+		}
+		
+		// Validate baseURL availability
+		if err := utils.ValidateBaseURLAvailability(baseURL, connections, connMu); err != nil {
+			log.Printf("BaseURL validation failed: %v", err)
+			HandleAuthFailure(tunnel, authenticating, authMu)
+			return false, err
+		}
+		
+		// Set the baseURL in the tunnel
+		tunnel.BaseURL = baseURL
+		
 		// Handle authentication request
 		success, err := AuthenticateTunnel(&authRequest)
 		if err != nil {
@@ -55,6 +78,7 @@ func AuthenticateTunnel(authReq *protocol.AuthRequestMessage) (bool, error) {
 		// Return error instead of crashing the server
 		return false, fmt.Errorf("failed to load config: %w", err)
 	}
+	log.Printf("SERVER Loaded config: %+v", config)
 
 	// Compare with the expected token
 	if authReq.AccessToken != config.AccessToken {
