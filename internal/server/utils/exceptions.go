@@ -1,4 +1,4 @@
-package server
+package utils
 
 // ValidationError represents a validation error with an HTTP status code
 type ValidationError struct {
