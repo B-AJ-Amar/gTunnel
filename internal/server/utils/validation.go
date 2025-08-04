@@ -44,16 +44,22 @@ func ValidateAndExtractParams(r *http.Request) (string, string, error) {
 }
 
 func ExtractPath(urlPath string) (string, string, error) {
-	if strings.HasPrefix(urlPath, "/") {
-		urlPath = urlPath[1:]
+	urlPath = strings.TrimPrefix(urlPath, "/")
+	logger.Debug("Extracting path from URL:", urlPath)
+	
+
+	pathSegments := strings.SplitN(urlPath, "/", 2)
+	if len(pathSegments) == 0 || pathSegments[0] == "" {
+		return "", "", &ValidationError{Message: "Invalid path: missing appID", StatusCode: http.StatusBadRequest}
 	}
 
-	parts := strings.SplitN(urlPath, "?", 2)
-	path := parts[0]
-	query := ""
-	if len(parts) > 1 {
-		query = parts[1]
+	appID := pathSegments[0]
+	remainingPath := ""
+	if len(pathSegments) > 1 {
+		remainingPath = "/" + pathSegments[1]
 	}
+	
 
-	return path, query, nil
+	logger.Debugf("Extracted appID: %s, remainingPath: %s", appID, remainingPath)
+	return appID, remainingPath, nil
 }

@@ -20,7 +20,7 @@ var (
 )
 
 func authenticate(wsURL url.URL, accessToken, baseURL string) (*models.ClientTunnelConn, error) {
-	
+
 	conn, _, err := websocket.DefaultDialer.Dial(wsURL.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("dial error: %w", err)
@@ -179,21 +179,21 @@ func StartClient(wsURL url.URL, tunnelHost, tunnelPort string, baseURL string) {
 	if err := configRepo.InitConfig(); err != nil {
 		logger.Warnf("Failed to initialize config: %v", err)
 	}
-	
+
 	config, err := configRepo.Load()
 	if err != nil {
 		logger.Warnf("Failed to load config: %v", err)
 	}
-	
+
 	accessToken := ""
 	if config != nil {
 		accessToken = config.AccessToken
 	}
-	
+
 	tunnel, err := authenticate(wsURL, accessToken, baseURL)
 	if err != nil {
 		logger.Fatalf("Authentication failed: %v", err)
 	}
-	
+
 	WsClientHandler(tunnel, tunnelHost, tunnelPort)
 }

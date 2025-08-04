@@ -3,7 +3,6 @@ package handlers
 import (
 	"io"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/logger"
@@ -13,7 +12,7 @@ import (
 )
 
 func HTTPToWebSocketHandler(w http.ResponseWriter, r *http.Request, pathTunnelRouter func(*http.Request, map[string]*models.ServerTunnelConn) (*models.ServerTunnelConn, string, string), connections map[string]*models.ServerTunnelConn) {
-	tunnel, appID, _ := pathTunnelRouter(r, connections)
+	tunnel, _, endpoint := pathTunnelRouter(r, connections)
 
 	if tunnel == nil {
 		http.Error(w, "No tunnel connected", http.StatusServiceUnavailable)
@@ -27,10 +26,9 @@ func HTTPToWebSocketHandler(w http.ResponseWriter, r *http.Request, pathTunnelRo
 	}
 	defer r.Body.Close()
 
-	new_url := strings.Replace(r.URL.String(), appID, "", 1)
 	reqMsg := protocol.HTTPRequestMessage{
 		Method:  r.Method,
-		URL:     new_url,
+		URL:     endpoint + "?" + r.URL.RawQuery,
 		Headers: map[string]string{},
 		Body:    body,
 	}

@@ -35,14 +35,14 @@ Examples:
 	Run: func(cmd *cobra.Command, args []string) {
 		// Show banner
 		logger.ShowBanner("client")
-		
+
 		// Initialize logger with debug level if debug flag is set
 		logLevel := logger.LevelInfo
 		if debug {
 			logLevel = logger.LevelDebug
 		}
 		logger.Init(logLevel, true)
-		
+
 		target := args[0]
 
 		configRepo := repositories.NewClientConfigRepo()

@@ -9,18 +9,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var port int
+var (
+	port  int
+	debug bool
+)
 
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start the gTunnel server",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Show banner
 		logger.ShowBanner("server")
-		
-		// Initialize logger
-		logger.Init(logger.LevelInfo, true)
-		
+
+		logLevel := logger.LevelInfo
+		if debug {
+			logLevel = logger.LevelDebug
+		}
+		logger.Init(logLevel, true)
+
 		configRepo := repositories.NewServerConfigRepo()
 
 		config, err := configRepo.Load()
@@ -28,7 +33,6 @@ var startCmd = &cobra.Command{
 			logger.Criticalf("Failed to load config, authentication is not supported: %v", err)
 		}
 
-		// Determine which port to use: command line flag > config file > default (7205)
 		finalPort := port
 		if !cmd.Flags().Changed("port") && config != nil && config.Port != 0 {
 			// Port flag not explicitly set, use config value if available
@@ -47,5 +51,5 @@ var startCmd = &cobra.Command{
 
 func init() {
 	startCmd.Flags().IntVarP(&port, "port", "p", 7205, "Port to run the server on")
-
+	startCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Enable debug logging")
 }
