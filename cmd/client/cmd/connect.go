@@ -83,8 +83,8 @@ Examples:
 			logger.Fatalf("Invalid server URL: %v", err)
 		}
 
-		logger.Infof("Connecting to server at %s...", finalServerURL)
-		logger.Infof("Tunneling %s:%s...", tunnelHost, tunnelPort)
+		logger.Infof("Connecting to server at %s ...", u.Host)
+		logger.Infof("Tunneling %s:%s ...", tunnelHost, tunnelPort)
 
 		client.StartClient(*u, tunnelHost, tunnelPort, baseURL)
 	},

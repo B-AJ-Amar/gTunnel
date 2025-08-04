@@ -46,6 +46,7 @@ type AuthResponseMessage struct {
 	ID      *string `json:"id,omitempty"`
 	Success bool    `json:"success,omitempty"`
 	Message string  `json:"error,omitempty"` // Optional error message if success is false
+	BaseURL string `json:"base_url"`
 }
 
 func NewHTTPRequestMessage(id, method, url string, headers map[string]string, body []byte) (*SocketMessage, error) {

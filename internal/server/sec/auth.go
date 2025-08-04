@@ -92,6 +92,7 @@ func HandleAuthSuccess(tunnel *models.ServerTunnelConn, connections map[string]*
 		ID:      &tunnel.ID,
 		Success: true,
 		Message: "Authentication successful",
+		BaseURL: tunnel.BaseURL,
 	}
 
 	serializedPayload, err := protocol.SerializeMessage(authResponse)

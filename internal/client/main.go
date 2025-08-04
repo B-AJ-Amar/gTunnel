@@ -20,7 +20,6 @@ var (
 )
 
 func authenticate(wsURL url.URL, accessToken, baseURL string) (*models.ClientTunnelConn, error) {
-	logger.Infof("Connecting to WebSocket server at: %s", wsURL.String())
 	
 	conn, _, err := websocket.DefaultDialer.Dial(wsURL.String(), nil)
 	if err != nil {
@@ -92,8 +91,9 @@ func authenticate(wsURL url.URL, accessToken, baseURL string) (*models.ClientTun
 		Conn: conn,
 	}
 
+	httpURL := fmt.Sprintf("http://%s%s", wsURL.Host, baseURL)
 	logger.Infof("Authentication successful. Connection ID: %s", *authResponse.ID)
-	// logger.Infof("baseURL: %s", baseURL)
+	logger.Infof("Tunnel URL: %s", httpURL)
 	return tunnel, nil
 }
 
