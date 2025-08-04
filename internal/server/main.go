@@ -1,10 +1,10 @@
 package server
 
 import (
-	"log"
 	"net/http"
 	"sync"
 
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/handlers"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/sec"
@@ -37,16 +37,16 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	success, err := sec.HandleWSAuth(tunnel, r, authenticating, &authMu, connections, &connMu)
 
 	if err != nil {
-		log.Println("Authentication error:", err)
+		logger.Errorf("Authentication error: %v", err)
 		conn.Close()
 		return
 	}
 	if !success {
-		log.Println("Authentication failed for tunnel:", id)
+		logger.Warnf("Authentication failed for tunnel: %s", id)
 		conn.Close()
 		return
 	}
-	log.Println("authentication SUCCESS")
+	logger.Info("Authentication successful")
 
 	handlers.HandleWSMessages(tunnel)
 
@@ -63,8 +63,8 @@ func StartServer(addr string) {
 	r.Get("/___gTl___/ws", wsHandler)
 	r.NotFound(httpToWebSocketHandler)
 
-	log.Println("Server listening on", addr)
+	logger.Infof("Server listening on %s", addr)
 	if err := http.ListenAndServe(addr, r); err != nil {
-		log.Fatal(err)
+		logger.Fatalf("Server failed to start: %v", err)
 	}
 }

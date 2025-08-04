@@ -1,18 +1,19 @@
 package cmd
 
 import (
-	"log"
 	"net/url"
 	"strings"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/client"
 	"github.com/B-AJ-Amar/gTunnel/internal/client/repositories"
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/spf13/cobra"
 )
 
 var (
 	serverURL string
 	baseURL   string
+	debug     bool
 )
 
 var connectCmd = &cobra.Command{
@@ -32,63 +33,65 @@ Examples:
   gtc connect -u ws://example.com:9000/tunnel/ws 3000           # Override server URL for this connection`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		// Show banner
+		logger.ShowBanner("client")
+		
+		// Initialize logger with debug level if debug flag is set
+		logLevel := logger.LevelInfo
+		if debug {
+			logLevel = logger.LevelDebug
+		}
+		logger.Init(logLevel, true)
+		
 		target := args[0]
 
-		// Initialize config repository
 		configRepo := repositories.NewClientConfigRepo()
 		if err := configRepo.InitConfig(); err != nil {
-			log.Fatalf("Failed to initialize config: %v", err)
+			logger.Fatalf("Failed to initialize config: %v", err)
 		}
 
-		// Determine server URL - use flag if provided, otherwise load from config
 		var finalServerURL string
 		if serverURL != "" {
 			finalServerURL = serverURL
 		} else {
 			config, err := configRepo.Load()
 			if err != nil {
-				log.Fatalf("Failed to load config: %v", err)
+				logger.Fatalf("Failed to load config: %v", err)
 			}
 			finalServerURL = config.ServerURL
 			if finalServerURL == "" {
-				log.Fatal("No server URL provided. Use --server-url flag or set it in config with 'gtc config --set-url <url>'")
+				logger.Fatal("No server URL provided. Use --server-url flag or set it in config with 'gtc config --set-url <url>'")
 			}
 		}
 
-		// Ensure URL starts with ws:// or wss://
 		if !strings.HasPrefix(finalServerURL, "ws://") && !strings.HasPrefix(finalServerURL, "wss://") {
 			finalServerURL = "ws://" + finalServerURL
 		}
 
-		// Parse the target argument to extract host and port
 		var tunnelHost, tunnelPort string
 		if strings.Contains(target, ":") {
-			// host:port format
 			parts := strings.SplitN(target, ":", 2)
 			tunnelHost = parts[0]
 			tunnelPort = parts[1]
 		} else {
-			// port only format
 			tunnelHost = "localhost"
 			tunnelPort = target
 		}
 
-		// Parse the server URL
 		u, err := url.Parse(finalServerURL)
 		if err != nil {
-			log.Fatalf("Invalid server URL: %v", err)
+			logger.Fatalf("Invalid server URL: %v", err)
 		}
 
-		log.Printf("Connecting to server at %s...\n", finalServerURL)
-		log.Printf("Tunneling %s:%s...\n", tunnelHost, tunnelPort)
+		logger.Infof("Connecting to server at %s...", finalServerURL)
+		logger.Infof("Tunneling %s:%s...", tunnelHost, tunnelPort)
 
 		client.StartClient(*u, tunnelHost, tunnelPort, baseURL)
 	},
 }
 
 func init() {
-	// url should not have a default value , thats a temp solution untill i setup the config file
-	// connectCmd.Flags().StringVarP(&serverURL, "url", "u", "localhost:8080/___gTl___/ws", "Server WebSocket URL to connect to")
 	connectCmd.Flags().StringVarP(&serverURL, "server-url", "u", "", "Server WebSocket URL to connect to")
 	connectCmd.Flags().StringVarP(&baseURL, "base-endpoint", "e", "", "Base endpoint path to route the tunneled app")
+	connectCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Enable debug logging")
 }

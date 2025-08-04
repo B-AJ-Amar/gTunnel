@@ -2,7 +2,6 @@ package client
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"sync"
 	"time"
@@ -10,6 +9,7 @@ import (
 	"github.com/B-AJ-Amar/gTunnel/internal/client/handlers"
 	"github.com/B-AJ-Amar/gTunnel/internal/client/models"
 	"github.com/B-AJ-Amar/gTunnel/internal/client/repositories"
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/gorilla/websocket"
 )
@@ -20,8 +20,8 @@ var (
 )
 
 func authenticate(wsURL url.URL, accessToken, baseURL string) (*models.ClientTunnelConn, error) {
-	log.Println("Connecting to WebSocket server at:", wsURL.String())
-
+	logger.Infof("Connecting to WebSocket server at: %s", wsURL.String())
+	
 	conn, _, err := websocket.DefaultDialer.Dial(wsURL.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("dial error: %w", err)
@@ -50,7 +50,7 @@ func authenticate(wsURL url.URL, accessToken, baseURL string) (*models.ClientTun
 		return nil, fmt.Errorf("failed to send auth request: %w", err)
 	}
 
-	log.Println("Authentication request sent, waiting for response...")
+	logger.Info("Authentication request sent, waiting for response...")
 
 	_, message, err := conn.ReadMessage()
 	if err != nil {
@@ -92,7 +92,8 @@ func authenticate(wsURL url.URL, accessToken, baseURL string) (*models.ClientTun
 		Conn: conn,
 	}
 
-	log.Printf("Authentication successful. Connection ID: %s", *authResponse.ID)
+	logger.Infof("Authentication successful. Connection ID: %s", *authResponse.ID)
+	// logger.Infof("baseURL: %s", baseURL)
 	return tunnel, nil
 }
 
@@ -103,7 +104,7 @@ func WsClientHandler(tunnel *models.ClientTunnelConn, tunnelHost, tunnelPort str
 	tunnel.Host = tunnelHost
 	tunnel.Port = tunnelPort
 
-	log.Printf("Starting WebSocket handler for connection: %s", id)
+	logger.Infof("Starting WebSocket handler for connection: %s", id)
 
 	connMu.Lock()
 	connections[id] = tunnel
@@ -114,11 +115,11 @@ func WsClientHandler(tunnel *models.ClientTunnelConn, tunnelHost, tunnelPort str
 		delete(connections, id)
 		connMu.Unlock()
 		conn.Close()
-		log.Printf("Connection closed: %s", id)
+		logger.Infof("Connection closed: %s", id)
 	}()
 
 	conn.SetPongHandler(func(appData string) error {
-		log.Println("Received pong:", appData)
+		logger.Debugf("Received pong: %s", appData)
 		return nil
 	})
 
@@ -128,10 +129,10 @@ func WsClientHandler(tunnel *models.ClientTunnelConn, tunnelHost, tunnelPort str
 		defer ticker.Stop()
 		for {
 			<-ticker.C
-			log.Println("Sending ping to", id)
+			logger.Debugf("Sending ping to %s", id)
 			err := conn.WriteMessage(websocket.PingMessage, []byte("ping"))
 			if err != nil {
-				log.Println("Ping failed, closing connection:", err)
+				logger.Errorf("Ping failed, closing connection: %v", err)
 				conn.Close()
 				return
 			}
@@ -142,32 +143,32 @@ func WsClientHandler(tunnel *models.ClientTunnelConn, tunnelHost, tunnelPort str
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
-			log.Println("Read error:", err)
+			logger.Errorf("Read error: %v", err)
 			break
 		}
 
-		log.Printf("[%s] Received: %s", id, message)
+		logger.Debugf("[%s] Received: %s", id, message)
 
 		var socketMessage protocol.SocketMessage
 		err = protocol.DeserializeMessage(message, &socketMessage)
 		if err != nil {
-			log.Printf("[%s] Error deserializing message: %v", id, err)
+			logger.Errorf("[%s] Error deserializing message: %v", id, err)
 			continue
 		}
-		log.Printf("[%s] Message type: %d", id, socketMessage.Type)
+		logger.Debugf("[%s] Message type: %d", id, socketMessage.Type)
 
 		switch socketMessage.Type {
 
 		case protocol.MessageTypeHTTPRequest:
 			err := handlers.ClientHTTPRequestHandler(socketMessage, tunnel)
 			if err != nil {
-				log.Printf("[%s] Error handling HTTP request: %v", id, err)
+				logger.Errorf("[%s] Error handling HTTP request: %v", id, err)
 				continue
 			}
-			log.Printf("[%s] HTTP response Sent Successfully", id)
+			logger.Debugf("[%s] HTTP response sent successfully", id)
 
 		default:
-			log.Printf("[%s] Unknown message type: %d", id, socketMessage.Type)
+			logger.Warnf("[%s] Unknown message type: %d", id, socketMessage.Type)
 			continue
 		}
 	}
@@ -176,23 +177,23 @@ func WsClientHandler(tunnel *models.ClientTunnelConn, tunnelHost, tunnelPort str
 func StartClient(wsURL url.URL, tunnelHost, tunnelPort string, baseURL string) {
 	configRepo := repositories.NewClientConfigRepo()
 	if err := configRepo.InitConfig(); err != nil {
-		log.Printf("Warning: Failed to initialize config: %v", err)
+		logger.Warnf("Failed to initialize config: %v", err)
 	}
-
+	
 	config, err := configRepo.Load()
 	if err != nil {
-		log.Printf("Warning: Failed to load config: %v", err)
+		logger.Warnf("Failed to load config: %v", err)
 	}
-
+	
 	accessToken := ""
 	if config != nil {
 		accessToken = config.AccessToken
 	}
-
+	
 	tunnel, err := authenticate(wsURL, accessToken, baseURL)
 	if err != nil {
-		log.Fatal("Authentication failed:", err)
+		logger.Fatalf("Authentication failed: %v", err)
 	}
-
+	
 	WsClientHandler(tunnel, tunnelHost, tunnelPort)
 }

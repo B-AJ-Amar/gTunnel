@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 	"sync"
 
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -18,7 +18,7 @@ var upgrader = websocket.Upgrader{
 func EstablishWSConn(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("Upgrade error:", err)
+		logger.Error("Upgrade error:", err)
 		return nil, err
 	}
 	return conn, nil
@@ -37,7 +37,7 @@ func SaveTunnel(conn *websocket.Conn, authenticating map[string]*models.ServerTu
 	authenticating[id] = tunnel
 	connMu.Unlock()
 
-	log.Printf("New connection established: %s", id)
+	logger.Infof("New connection established: %s", id)
 	return tunnel
 }
 
@@ -48,7 +48,7 @@ func MoveTunnelToConnections(id string, authenticating map[string]*models.Server
 	if tunnel, ok := authenticating[id]; ok {
 		delete(authenticating, id)
 		connections[id] = tunnel
-		log.Printf("Tunnel moved to connections: %s", id)
+		logger.Infof("Tunnel moved to connections: %s", id)
 	}
 }
 
@@ -58,7 +58,7 @@ func TunnelCleanup(id string, conn *websocket.Conn, connections map[string]*mode
 		delete(connections, id)
 		connMu.Unlock()
 		conn.Close()
-		log.Printf("Connection closed: %s", id)
+		logger.Infof("Connection closed: %s", id)
 	}
 }
 
@@ -66,17 +66,17 @@ func HandleWSMessages(tunnel *models.ServerTunnelConn) {
 	for {
 		_, message, err := tunnel.Conn.ReadMessage()
 		if err != nil {
-			log.Println("Read error:", err)
+			logger.Error("Read error:", err)
 			break
 		}
 
-		log.Printf("[%s] Received: %s", tunnel.ID, message)
+		logger.Debugf("[%s] Received: %s", tunnel.ID, message)
 
 		// Send to response channel (non-blocking)
 		select {
 		case tunnel.ResponseCh <- message:
 		default:
-			log.Printf("[%s] WARNING: Dropping message - no listener waiting", tunnel.ID)
+			logger.Warnf("[%s] WARNING: Dropping message - no listener waiting", tunnel.ID)
 		}
 	}
 }

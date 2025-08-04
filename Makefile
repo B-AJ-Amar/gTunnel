@@ -7,10 +7,10 @@ BUILD_DATE ?= $(shell date -u '+%Y-%m-%d_%H:%M:%S')
 GO_VERSION ?= $(shell go version | awk '{print $$3}')
 
 # Build flags
-LDFLAGS = -X github.com/B-AJ-Amar/gTunnel/internal/version.Version=$(VERSION) \
-          -X github.com/B-AJ-Amar/gTunnel/internal/version.GitCommit=$(GIT_COMMIT) \
-          -X github.com/B-AJ-Amar/gTunnel/internal/version.BuildDate=$(BUILD_DATE) \
-          -X github.com/B-AJ-Amar/gTunnel/internal/version.GoVersion=$(GO_VERSION)
+LDFLAGS = -X github.com/B-AJ-Amar/gTunnel/internal/pkg.Version=$(VERSION) \
+          -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GitCommit=$(GIT_COMMIT) \
+          -X github.com/B-AJ-Amar/gTunnel/internal/pkg.BuildDate=$(BUILD_DATE) \
+          -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion=$(GO_VERSION)
 
 # Build directory
 BUILD_DIR = build

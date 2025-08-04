@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/repositories"
 	"github.com/spf13/cobra"
 )
@@ -37,13 +37,13 @@ Examples:
 
 		// Initialize config if it doesn't exist
 		if err := configRepo.InitConfig(); err != nil {
-			log.Fatalf("Failed to initialize config: %v", err)
+			logger.Fatalf("Failed to initialize config: %v", err)
 		}
 
 		// Handle different operations
 		if setToken != "" {
 			if err := configRepo.UpdateAccessToken(setToken); err != nil {
-				log.Fatalf("Failed to update access token: %v", err)
+				logger.Fatalf("Failed to update access token: %v", err)
 			}
 			fmt.Println("Access token updated successfully")
 			return
@@ -51,7 +51,7 @@ Examples:
 
 		if setPort != 0 {
 			if err := configRepo.UpdatePort(setPort); err != nil {
-				log.Fatalf("Failed to update port: %v", err)
+				logger.Fatalf("Failed to update port: %v", err)
 			}
 			fmt.Printf("Server port updated to: %d\n", setPort)
 			return
@@ -60,7 +60,7 @@ Examples:
 		// Show configuration (default behavior)
 		config, err := configRepo.Load()
 		if err != nil {
-			log.Fatalf("Failed to load config: %v", err)
+			logger.Fatalf("Failed to load config: %v", err)
 		}
 
 		fmt.Printf("Configuration file: %s\n", configRepo.GetConfigPath())

@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"io"
-	"log"
 	"net/http"
 	"strings"
 	"time"
 
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 	"github.com/gorilla/websocket"
@@ -61,7 +61,7 @@ func HTTPToWebSocketHandler(w http.ResponseWriter, r *http.Request, pathTunnelRo
 		http.Error(w, "Tunnel write failed", http.StatusBadGateway)
 		return
 	}
-	log.Println("HTTPToWebSocketHandler: message sent to tunnel")
+	logger.Info("HTTPToWebSocketHandler: message sent to tunnel")
 
 	select {
 	case responseData := <-tunnel.ResponseCh:

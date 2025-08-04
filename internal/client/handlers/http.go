@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/client/models"
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/protocol"
 	"github.com/gorilla/websocket"
 )
@@ -16,10 +16,10 @@ func ClientHTTPRequestHandler(socketMessage protocol.SocketMessage, tunnel *mode
 	var httpRequest protocol.HTTPRequestMessage
 	err := protocol.DeserializeMessage(socketMessage.Payload, &httpRequest)
 	if err != nil {
-		log.Printf("Error deserializing HTTP request: %v", err)
+		logger.Errorf("Error deserializing HTTP request: %v", err)
 		return err
 	}
-	log.Printf("HTTP Request: %s %s", httpRequest.Method, httpRequest.URL)
+	logger.Infof("HTTP Request: %s %s", httpRequest.Method, httpRequest.URL)
 
 	// request
 	req, err := http.NewRequest(

@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"log"
 	"net/http"
 
+	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/models"
 )
 
@@ -12,19 +12,19 @@ import (
 func PathTunnelRouter(r *http.Request, connections map[string]*models.ServerTunnelConn) (*models.ServerTunnelConn, string, string) {
 	appID, endpoint, err := ExtractPath(r.URL.Path)
 
-	log.Println("connections : ")
+	logger.Debug("connections : ")
 	for _, conn := range connections {
-		log.Printf("PathTunnelRouter: Connection BaseURL: %s", conn.BaseURL)
-		log.Printf("PathTunnelRouter: Connection ID: %s", conn.ID)
+		logger.Debugf("PathTunnelRouter: Connection BaseURL: %s", conn.BaseURL)
+		logger.Debugf("PathTunnelRouter: Connection ID: %s", conn.ID)
 	}
 
 	if err != nil {
-		log.Printf("PathTunnelRouter: Error extracting path: %v", err)
+		logger.Errorf("PathTunnelRouter: Error extracting path: %v", err)
 		return nil, "", ""
 	}
 
-	log.Println("PathTunnelRouter: Received request with path:", r.URL.Path)
-	log.Printf("PathTunnelRouter: Extracted appID: %s", appID)
+	logger.Debug("PathTunnelRouter: Received request with path:", r.URL.Path)
+	logger.Debugf("PathTunnelRouter: Extracted appID: %s", appID)
 
 	for _, conn := range connections {
 		if conn.BaseURL == appID {
