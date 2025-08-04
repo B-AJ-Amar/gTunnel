@@ -140,6 +140,7 @@ comming soon
   - gtunnel client to gtunnel server
   - client management server (dashboard , settings ..etc)
 - []Queue for request in case of disconnected clients (for webhooks)
+- []make a logo
 
 ## CLI
 
