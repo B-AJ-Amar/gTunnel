@@ -169,6 +169,49 @@ TODO : add viper for config
 | `version`    | Print client version info                   |
 | `completion` | Generate shell autocompletion script        |
 
+## 🚀 Quick Deployment
+
+### Deploy to Render (Free)
+
+Deploy your own gTunnel server instantly on Render's free tier:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/B-AJ-Amar/gTunnel)
+
+The Render deployment will:
+
+- 🆓 Use the free tier (no credit card required)
+- 🐳 Deploy using Docker container
+- 🔄 Auto-deploy on git push
+- 📊 Include health checks
+- 🌐 Provide a public HTTPS URL
+
+After deployment, your server will be available at `https://your-app-name.onrender.com`
+
+### Other Deployment Options
+
+#### Docker
+
+```bash
+# Pull and run the server
+docker run -d --name gtunnel-server \
+  -p 8080:8080 \
+  ghcr.io/b-aj-amar/gtunnel-server:latest
+
+# Or use docker-compose
+docker-compose up gtunnel-server
+```
+
+#### Manual Server Setup
+
+```bash
+# Download and install
+wget https://github.com/B-AJ-Amar/gTunnel/releases/latest/download/gTunnel-server_linux_amd64.tar.gz
+tar -xzf gTunnel-server_linux_amd64.tar.gz
+chmod +x gts
+
+# Start the server
+./gts start --port 8080
+```
 
 ## Contributing
 
