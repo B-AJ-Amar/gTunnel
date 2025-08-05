@@ -25,7 +25,7 @@ builds:
       - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.Version={{.Version}}
       - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GitCommit={{.ShortCommit}}
       - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.BuildDate={{.Date}}
-      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion={{.GoVersion}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion=1.23.5
 
   - id: gtunnel-server
     main: ./cmd/server
@@ -46,7 +46,7 @@ builds:
       - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.Version={{.Version}}
       - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GitCommit={{.ShortCommit}}
       - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.BuildDate={{.Date}}
-      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion={{.GoVersion}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion=1.23.5
 
 archives:
   - id: client-archive
