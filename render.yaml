@@ -1,23 +1,21 @@
 version: "1"
 
 services:
-  - type: web
+  - type: worker
     name: gtunnel-server
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile.render
     dockerContext: .
-    healthCheckPath: /___gTl___/health
     envVars:
       - key: GTUNNEL_LOG_LEVEL
         value: info
       - key: GTUNNEL_USE_ENV
         value: "true"
       - key: GTUNNEL_ACCESS_TOKEN
-        generateValue: true
+        value: ""
       - key: PORT
-        fromService:
-          type: web
-          name: gtunnel-server
-          property: port
+        value: "7205"  # or whatever your server listens on
+      - key: GTUNNEL_PORT
+        value: "7205"  
     autoDeploy: true
