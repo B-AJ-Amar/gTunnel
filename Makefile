@@ -22,6 +22,7 @@ CLIENT_LONG_NAME = gtunnel-client
 SERVER_LONG_NAME = gtunnel-server
 
 .PHONY: all build build-client build-server build-links clean test help install
+# .PHONY: all build build-client build-server build-links clean test help install release release-snapshot goreleaser-check
 
 # Default target
 all: build
@@ -93,6 +94,9 @@ help:
 	@echo "  test         - Run tests"
 	@echo "  clean        - Clean build directory"
 	@echo "  help         - Show this help message"
+	@echo "  release      - Create a release using GoReleaser"
+	@echo "  release-snapshot - Create a snapshot release using GoReleaser"
+	@echo "  goreleaser-check - Check GoReleaser configuration"
 	@echo ""
 	@echo "Available commands after build:"
 	@echo "  Short names: gtc, gts"
@@ -102,3 +106,16 @@ help:
 	@echo "  VERSION      - Override version (default: git describe)"
 	@echo "  GIT_COMMIT   - Override git commit (default: git rev-parse)"
 	@echo "  BUILD_DATE   - Override build date (default: current date)"
+
+# GoReleaser targets
+goreleaser-check:
+	@echo "Checking GoReleaser configuration..."
+	goreleaser check
+
+release-snapshot:
+	@echo "Creating snapshot release..."
+	goreleaser release --snapshot --clean --skip=publish
+
+release:
+	@echo "Creating release..."
+	goreleaser release --clean

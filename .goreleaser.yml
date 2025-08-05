@@ -1,0 +1,70 @@
+# .goreleaser.yml
+project_name: gtunnel
+release:
+  github:
+    owner: your-github-username
+    name: your-repo-name
+
+builds:
+  - id: gtunnel-client
+    main: ./cmd/client
+    binary: gtc
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - "386"
+      - arm64
+    env:
+      - CGO_ENABLED=0
+      - GOAMD64=default
+    dir: .
+    ldflags:
+      - "-s -w -X main.version={{.Version}}"
+
+  - id: gtunnel-server
+    main: ./cmd/server
+    binary: gts
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - "386"
+      - arm64
+    env:
+      - CGO_ENABLED=0
+      - GOAMD64=default
+    dir: .
+    ldflags:
+      - "-s -w -X main.version={{.Version}}"
+
+archives:
+  - id: client-archive
+    builds:
+      - gtunnel-client
+    format: tar.gz
+    name_template: "{{ .ProjectName }}-client_{{ .Os }}_{{ .Arch }}"
+    wrap_in_directory: true
+
+  - id: server-archive
+    builds:
+      - gtunnel-server
+    format: tar.gz
+    name_template: "{{ .ProjectName }}-server_{{ .Os }}_{{ .Arch }}"
+    wrap_in_directory: true
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
