@@ -44,7 +44,7 @@ var startCmd = &cobra.Command{
 		if bindAddress != "" {
 			addr = bindAddress
 		} else {
-			addr = fmt.Sprintf("0.0.0.0:%d", finalPort)
+			addr = fmt.Sprintf(":%d", finalPort)
 		}
 
 		logger.Infof("Starting server on %s...", addr)
