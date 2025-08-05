@@ -44,6 +44,9 @@ archives:
   - id: client-archive
     builds:
       - gtunnel-client
+    format_overrides:
+      - goos: windows
+        format: zip
     format: tar.gz
     name_template: "{{ .ProjectName }}-client_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     wrap_in_directory: true
@@ -51,6 +54,9 @@ archives:
   - id: server-archive
     builds:
       - gtunnel-server
+    format_overrides:
+      - goos: windows
+        format: zip
     format: tar.gz
     name_template: "{{ .ProjectName }}-server_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     wrap_in_directory: true
