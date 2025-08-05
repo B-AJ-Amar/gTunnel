@@ -3,8 +3,8 @@ FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 
-# Install git (needed for go modules)
-RUN apk add --no-cache git
+# Install git and make (needed for go modules and Makefile)
+RUN apk add --no-cache git make
 
 # Copy go mod files
 COPY go.mod go.sum ./
@@ -13,8 +13,8 @@ RUN go mod download
 # Copy source code
 COPY . .
 
-# Build the server binary
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o gtunnel-server ./cmd/server
+# Build the server binary using Makefile
+RUN make build-server
 
 # Final stage
 FROM alpine:latest
@@ -22,18 +22,14 @@ FROM alpine:latest
 # Install ca-certificates and curl for HTTPS connections and health checks
 RUN apk --no-cache add ca-certificates curl
 
-WORKDIR /root/
-
-# Copy the binary and startup script from builder stage
-COPY --from=builder /app/gtunnel-server .
-COPY --from=builder /app/start.sh .
-
-# Create a non-root user
+# Create a non-root user first
 RUN adduser -D -s /bin/sh gtunnel
 
-# Change ownership of files to gtunnel user and make script executable
-RUN chown gtunnel:gtunnel gtunnel-server start.sh && \
-    chmod +x start.sh
+# Set working directory to gtunnel user's home
+WORKDIR /home/gtunnel
+
+# Copy the binary from builder stage with correct ownership
+COPY --from=builder --chown=gtunnel:gtunnel /app/build/gts ./gtunnel-server
 
 # Expose port (will be overridden by Render's PORT env var)
 EXPOSE 7205
@@ -44,5 +40,5 @@ USER gtunnel
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:${PORT:-7205}/___gTl___/health || exit 1
 
-# Set the startup script as entrypoint
-ENTRYPOINT ["./start.sh"]
+# Set the server command directly as entrypoint
+ENTRYPOINT ["sh", "-c", "exec ./gtunnel-server start --bind-address \"0.0.0.0:${PORT:-7205}\""]
