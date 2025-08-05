@@ -10,8 +10,9 @@ import (
 )
 
 var (
-	port  int
-	debug bool
+	port        int
+	bindAddress string
+	debug       bool
 )
 
 var startCmd = &cobra.Command{
@@ -39,17 +40,25 @@ var startCmd = &cobra.Command{
 			finalPort = config.Port
 		}
 
-		logger.Infof("Starting server on port %d...", finalPort)
+		var addr string
+		if bindAddress != "" {
+			addr = bindAddress
+		} else {
+			addr = fmt.Sprintf("0.0.0.0:%d", finalPort)
+		}
+
+		logger.Infof("Starting server on %s...", addr)
 
 		if config != nil && config.AccessToken == "" {
 			logger.Critical("Access token is not set in the config. Please set it for secure access.")
 		}
 
-		server.StartServer(fmt.Sprintf(":%d", finalPort))
+		server.StartServer(addr)
 	},
 }
 
 func init() {
 	startCmd.Flags().IntVarP(&port, "port", "p", 7205, "Port to run the server on")
+	startCmd.Flags().StringVar(&bindAddress, "bind-address", "", "Address to bind the server to (e.g., 0.0.0.0:8080)")
 	startCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Enable debug logging")
 }

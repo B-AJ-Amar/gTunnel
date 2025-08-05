@@ -58,9 +58,16 @@ func httpToWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 	handlers.HTTPToWebSocketHandler(w, r, utils.PathTunnelRouter, connections)
 }
 
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status":"healthy","service":"gtunnel-server"}`))
+}
+
 func StartServer(addr string) {
 	r := chi.NewRouter()
 	r.Get("/___gTl___/ws", wsHandler)
+	r.Get("/___gTl___/health", healthHandler)
 	r.NotFound(httpToWebSocketHandler)
 
 	logger.Infof("Server listening on %s", addr)
