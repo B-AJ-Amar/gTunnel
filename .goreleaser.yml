@@ -21,7 +21,11 @@ builds:
       - CGO_ENABLED=0
     dir: .
     ldflags:
-      - "-s -w -X main.version={{.Version}}"
+      - -s -w
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.Version={{.Version}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GitCommit={{.ShortCommit}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.BuildDate={{.Date}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion={{.GoVersion}}
 
   - id: gtunnel-server
     main: ./cmd/server
@@ -38,7 +42,11 @@ builds:
       - CGO_ENABLED=0
     dir: .
     ldflags:
-      - "-s -w -X main.version={{.Version}}"
+      - -s -w
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.Version={{.Version}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GitCommit={{.ShortCommit}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.BuildDate={{.Date}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion={{.GoVersion}}
 
 archives:
   - id: client-archive
@@ -60,6 +68,21 @@ archives:
     format: tar.gz
     name_template: "{{ .ProjectName }}-server_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     wrap_in_directory: true
+
+nfpms:
+  - id: linux-packages
+    formats:
+      - deb
+      - rpm
+    bindir: /usr/bin
+    builds:
+      - gtunnel-client
+      - gtunnel-server
+    section: default
+    maintainer: "B-AJ-Amar <amarbouakaz91@gmail.com>"
+    description: "gTunnel is a fast, lightweight tunneling solution"
+    license: MIT
+    homepage: "https://github.com/B-AJ-Amar/gTunnel"
 
 checksum:
   name_template: 'checksums.txt'
