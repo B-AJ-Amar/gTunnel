@@ -19,8 +19,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflag
 # Final stage
 FROM alpine:latest
 
-# Install ca-certificates for HTTPS connections
-RUN apk --no-cache add ca-certificates
+# Install ca-certificates and curl for HTTPS connections and health checks
+RUN apk --no-cache add ca-certificates curl
 
 WORKDIR /root/
 
@@ -28,23 +28,21 @@ WORKDIR /root/
 COPY --from=builder /app/gtunnel-server .
 COPY --from=builder /app/start.sh .
 
-# Make startup script executable
-RUN chmod +x start.sh
-
-# Expose port (will be overridden by Render's PORT env var)
-EXPOSE 7205
-
 # Create a non-root user
 RUN adduser -D -s /bin/sh gtunnel
 
-# Change ownership of files to gtunnel user
-RUN chown gtunnel:gtunnel gtunnel-server start.sh
+# Change ownership of files to gtunnel user and make script executable
+RUN chown gtunnel:gtunnel gtunnel-server start.sh && \
+    chmod +x start.sh
+
+# Expose port (will be overridden by Render's PORT env var)
+EXPOSE 7205
 
 USER gtunnel
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-7205}/health || exit 1
+  CMD curl -f http://localhost:${PORT:-7205}/___gTl___/health || exit 1
 
 # Set the startup script as entrypoint
 ENTRYPOINT ["./start.sh"]
