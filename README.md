@@ -532,6 +532,7 @@ We welcome contributions! Here's how you can help:
 - [x] **CLI tools** - Complete command-line interface
 - [x] **Docker support** - Pre-built Docker images
 - [x] **Multi-platform** - Windows, macOS, and Linux support
+- [ ] **WebSocket support** - Native WebSocket tunneling for real-time applications
 - [ ] **Multiple tunnels** - Multiple tunnels per client
 - [ ] **Multicasting** - Broadcast same message to multiple clients (for webhooks)
 - [ ] **Advanced client management** - Profiles, advanced auth, permissions ...
