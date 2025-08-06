@@ -15,8 +15,6 @@ services:
         value: "true"
       - key: GTUNNEL_ACCESS_TOKEN
         value: ""
-      - key: PORT
-        value: "7205"  # or whatever your server listens on
       - key: GTUNNEL_PORT
         value: "7205"  # or whatever your server listens on
       - key: test_env

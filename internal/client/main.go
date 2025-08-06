@@ -19,11 +19,75 @@ var (
 	connMu      sync.Mutex
 )
 
+// tryConnect attempts to connect with wss:// first, then falls back to ws://
+// If port is 0, it will try common ports (443 for wss, 80 for ws)
+func tryConnect(wsURL url.URL) (*websocket.Conn, error) {
+	hostname := wsURL.Hostname()
+	port := wsURL.Port()
+
+	// If port is 0 or empty, try common ports
+	if port == "0" || port == "" {
+		// Try wss:// with port 443
+		secureURL := wsURL
+		secureURL.Scheme = "wss"
+		secureURL.Host = hostname + ":443"
+
+		logger.Infof("Attempting secure connection to %s...", secureURL.String())
+		conn, _, err := websocket.DefaultDialer.Dial(secureURL.String(), nil)
+		if err == nil {
+			logger.Infof("Secure connection successful on port 443")
+			return conn, nil
+		}
+		logger.Warnf("Secure connection failed on port 443: %v", err)
+
+		// Try ws:// with port 80
+		insecureURL := wsURL
+		insecureURL.Scheme = "ws"
+		insecureURL.Host = hostname + ":80"
+
+		logger.Infof("Attempting insecure connection to %s...", insecureURL.String())
+		conn, _, err = websocket.DefaultDialer.Dial(insecureURL.String(), nil)
+		if err != nil {
+			return nil, fmt.Errorf("failed to connect on both port 443 (wss) and port 80 (ws). Last error: %w", err)
+		}
+
+		logger.Infof("Insecure connection successful on port 80")
+		return conn, nil
+	}
+
+	// If port is specified, try with that port
+	// Try wss:// (secure WebSocket) first
+	secureURL := wsURL
+	secureURL.Scheme = "wss"
+
+	logger.Infof("Attempting secure connection to %s...", secureURL.String())
+	conn, _, err := websocket.DefaultDialer.Dial(secureURL.String(), nil)
+	if err == nil {
+		logger.Infof("Secure connection successful")
+		return conn, nil
+	}
+
+	logger.Warnf("Secure connection failed: %v", err)
+	logger.Infof("Attempting insecure connection...")
+
+	// Fallback to ws:// (insecure WebSocket)
+	insecureURL := wsURL
+	insecureURL.Scheme = "ws"
+
+	conn, _, err = websocket.DefaultDialer.Dial(insecureURL.String(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("both secure and insecure connections failed. Last error: %w", err)
+	}
+
+	logger.Infof("Insecure connection successful")
+	return conn, nil
+}
+
 func authenticate(wsURL url.URL, accessToken, baseURL string) (*models.ClientTunnelConn, error) {
 
-	conn, _, err := websocket.DefaultDialer.Dial(wsURL.String(), nil)
+	conn, err := tryConnect(wsURL)
 	if err != nil {
-		return nil, fmt.Errorf("dial error: %w", err)
+		return nil, fmt.Errorf("connection failed: %w", err)
 	}
 
 	authRequest := protocol.AuthRequestMessage{

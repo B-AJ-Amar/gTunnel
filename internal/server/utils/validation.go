@@ -46,7 +46,6 @@ func ValidateAndExtractParams(r *http.Request) (string, string, error) {
 func ExtractPath(urlPath string) (string, string, error) {
 	urlPath = strings.TrimPrefix(urlPath, "/")
 	logger.Debug("Extracting path from URL:", urlPath)
-	
 
 	pathSegments := strings.SplitN(urlPath, "/", 2)
 	if len(pathSegments) == 0 || pathSegments[0] == "" {
@@ -58,7 +57,6 @@ func ExtractPath(urlPath string) (string, string, error) {
 	if len(pathSegments) > 1 {
 		remainingPath = "/" + pathSegments[1]
 	}
-	
 
 	logger.Debugf("Extracted appID: %s, remainingPath: %s", appID, remainingPath)
 	return appID, remainingPath, nil

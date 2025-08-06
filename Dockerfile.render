@@ -38,7 +38,7 @@ USER gtunnel
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:${PORT:-7205}/___gTl___/health || exit 1
+  CMD curl -f http://localhost:${GTUNNEL_PORT:-7205}/___gTl___/health || exit 1
 
 # Set the server command directly as entrypoint
-ENTRYPOINT ["sh", "-c", "exec ./gtunnel-server start --bind-address \"0.0.0.0:${PORT:-7205}\""]
+ENTRYPOINT ["sh", "-c", "exec ./gtunnel-server start --bind-address \"0.0.0.0:${GTUNNEL_PORT:-7205}\""]

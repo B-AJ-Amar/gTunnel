@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/server"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/repositories"
@@ -10,7 +8,6 @@ import (
 )
 
 var (
-	port        int
 	bindAddress string
 	debug       bool
 )
@@ -34,31 +31,17 @@ var startCmd = &cobra.Command{
 			logger.Criticalf("Failed to load config, authentication is not supported: %v", err)
 		}
 
-		finalPort := port
-		if !cmd.Flags().Changed("port") && config != nil && config.Port != 0 {
-			// Port flag not explicitly set, use config value if available
-			finalPort = config.Port
-		}
-
-		var addr string
-		if bindAddress != "" {
-			addr = bindAddress
-		} else {
-			addr = fmt.Sprintf(":%d", finalPort)
-		}
-
-		logger.Infof("Starting server on %s...", addr)
+		logger.Infof("Starting server on %s...", bindAddress)
 
 		if config != nil && config.AccessToken == "" {
 			logger.Critical("Access token is not set in the config. Please set it for secure access.")
 		}
 
-		server.StartServer(addr)
+		server.StartServer(bindAddress)
 	},
 }
 
 func init() {
-	startCmd.Flags().IntVarP(&port, "port", "p", 7205, "Port to run the server on")
-	startCmd.Flags().StringVar(&bindAddress, "bind-address", "", "Address to bind the server to (e.g., 0.0.0.0:8080)")
+	startCmd.Flags().StringVar(&bindAddress, "bind-address", "0.0.0.0:7205", "Address to bind the server to (e.g., 0.0.0.0:8080)")
 	startCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Enable debug logging")
 }

@@ -8,18 +8,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// min returns the minimum of two integers
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 var (
 	showConfig bool
 	setToken   string
-	setPort    int
 )
 
 var configCmd = &cobra.Command{
@@ -49,14 +40,6 @@ Examples:
 			return
 		}
 
-		if setPort != 0 {
-			if err := configRepo.UpdatePort(setPort); err != nil {
-				logger.Fatalf("Failed to update port: %v", err)
-			}
-			fmt.Printf("Server port updated to: %d\n", setPort)
-			return
-		}
-
 		// Show configuration (default behavior)
 		config, err := configRepo.Load()
 		if err != nil {
@@ -64,9 +47,8 @@ Examples:
 		}
 
 		fmt.Printf("Configuration file: %s\n", configRepo.GetConfigPath())
-		fmt.Printf("Server Port: %d\n", config.Port)
 		if config.AccessToken != "" {
-			fmt.Printf("Access Token: %s...\n", config.AccessToken[:min(len(config.AccessToken), 10)])
+			fmt.Printf("Access Token: %s*****\n", config.AccessToken[:min(len(config.AccessToken), 3)])
 		} else {
 			fmt.Println("Access Token: (not set)")
 		}
@@ -76,5 +58,4 @@ Examples:
 func init() {
 	configCmd.Flags().BoolVarP(&showConfig, "show", "s", false, "Show current configuration")
 	configCmd.Flags().StringVarP(&setToken, "set-token", "t", "", "Set the access token")
-	configCmd.Flags().IntVarP(&setPort, "set-port", "p", 0, "Set the server port (default: 7205)")
 }
