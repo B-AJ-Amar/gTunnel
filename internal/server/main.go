@@ -3,6 +3,9 @@ package server
 import (
 	"net/http"
 	"sync"
+	"time"
+
+	"github.com/gorilla/websocket"
 
 	"github.com/B-AJ-Amar/gTunnel/internal/logger"
 	"github.com/B-AJ-Amar/gTunnel/internal/server/handlers"
@@ -64,6 +67,58 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status":"healthy","service":"gtunnel-server"}`))
 }
 
+
+
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool { return true },
+}
+
+func tempWSHandelr(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		logger.Errorf("WebSocket upgrade failed: %v", err)
+		return
+	}
+	defer conn.Close()
+
+	done := make(chan struct{})
+
+	// Ping loop
+	go func() {
+		ticker := time.NewTicker(10 * time.Second)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ticker.C:
+				if err := conn.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
+					logger.Warnf("Ping failed: %v", err)
+					close(done)
+					return
+				}
+			case <-done:
+				return
+			}
+		}
+	}()
+
+	// Message loop
+	ticker := time.NewTicker(2 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			if err := conn.WriteMessage(websocket.TextMessage, []byte("Hello from tempWSHandelr")); err != nil {
+				logger.Warnf("Write failed: %v", err)
+				close(done)
+				return
+			}
+		case <-done:
+			return
+		}
+	}
+}
+
+
 func StartServer(addr string) {
 	r := chi.NewRouter()
 	r.Use(func(next http.Handler) http.Handler {
@@ -79,6 +134,7 @@ func StartServer(addr string) {
 		})
 	})
 	r.Get("/___gTl___/ws", wsHandler)
+	r.Get("/ws",tempWSHandelr)
 	r.Get("/___gTl___/health", healthHandler)
 	r.NotFound(httpToWebSocketHandler)
 
