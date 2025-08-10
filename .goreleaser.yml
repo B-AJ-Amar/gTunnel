@@ -107,6 +107,27 @@ dockers:
       - internal/
       - Makefile
 
+  - id: gtunnel-client
+    image_templates:
+      - "ghcr.io/b-aj-amar/gtunnel-client:{{ .Version }}"
+      - "ghcr.io/b-aj-amar/gtunnel-client:latest"
+    dockerfile: Dockerfile.client
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}-client"
+      - "--label=org.opencontainers.image.description=gTunnel Client - Fast, lightweight tunneling solution for microservices"
+      - "--label=org.opencontainers.image.url=https://github.com/B-AJ-Amar/gTunnel"
+      - "--label=org.opencontainers.image.source=https://github.com/B-AJ-Amar/gTunnel"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+    extra_files:
+      - go.mod
+      - go.sum
+      - cmd/
+      - internal/
+      - Makefile
+
 checksum:
   name_template: 'checksums.txt'
 

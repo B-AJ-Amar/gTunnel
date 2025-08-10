@@ -16,10 +16,10 @@ COPY . .
 RUN make build
 
 # Final stage
-FROM alpine:latest
+FROM alpine:3.19
 
-# Install ca-certificates and curl for HTTPS connections and health checks
-RUN apk --no-cache add ca-certificates curl
+# Update package index and install ca-certificates and curl for HTTPS connections and health checks
+RUN apk update && apk --no-cache add ca-certificates curl
 
 # Create a non-root user first
 RUN adduser -D -s /bin/sh gtunnel

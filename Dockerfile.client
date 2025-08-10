@@ -1,0 +1,60 @@
+# Build stage
+FROM golang:1.23-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Install git (needed for go modules)
+RUN apk add --no-cache git
+
+# Copy go mod files
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build the client binary
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gtc ./cmd/client
+
+# Final stage
+FROM alpine:3.19
+
+# Update package index and install ca-certificates for HTTPS
+RUN apk update && apk --no-cache add ca-certificates
+
+# Create non-root user
+RUN addgroup -g 1000 gtunnel && \
+    adduser -D -s /bin/sh -u 1000 -G gtunnel gtunnel
+
+# Set working directory
+WORKDIR /home/gtunnel
+
+# Copy binary from builder stage
+COPY --from=builder /app/gtc /usr/local/bin/gtc
+
+# Make binary executable
+RUN chmod +x /usr/local/bin/gtc
+
+# Change ownership
+RUN chown gtunnel:gtunnel /usr/local/bin/gtc
+
+# Switch to non-root user
+USER gtunnel
+
+# Environment variables with defaults
+ENV GTUNNEL_SERVER_URL=""
+ENV GTUNNEL_ACCESS_TOKEN=""
+ENV GTUNNEL_TARGET_HOST="localhost"
+ENV GTUNNEL_TARGET_PORT="3000"
+ENV GTUNNEL_BASE_ENDPOINT=""
+ENV GTUNNEL_DEBUG="false"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD gtc version || exit 1
+
+# Default command
+CMD ["sh", "-c", "gtc connect ${GTUNNEL_DEBUG:+--debug} ${GTUNNEL_SERVER_URL:+--server-url $GTUNNEL_SERVER_URL} ${GTUNNEL_BASE_ENDPOINT:+--base-endpoint $GTUNNEL_BASE_ENDPOINT} $GTUNNEL_TARGET_HOST:$GTUNNEL_TARGET_PORT"]

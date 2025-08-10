@@ -163,6 +163,65 @@ make build
 sudo make install
 ```
 
+#### Option 5: Docker
+
+For containerized environments and microservices:
+
+```bash
+# Run client in Docker
+docker run -d --name gtunnel-client \
+  -e GTUNNEL_SERVER_URL="https://your-server.com" \
+  -e GTUNNEL_ACCESS_TOKEN="your-token" \
+  -e GTUNNEL_TARGET_HOST="app" \
+  -e GTUNNEL_TARGET_PORT="3000" \
+  --network your-network \
+  ghcr.io/b-aj-amar/gtunnel-client:latest
+
+# With Docker Compose
+cat > docker-compose.yml << EOF
+version: '3.8'
+services:
+  app:
+    image: your-app:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  gtunnel-client:
+    image: ghcr.io/b-aj-amar/gtunnel-client:latest
+    environment:
+      - GTUNNEL_SERVER_URL=https://your-server.com
+      - GTUNNEL_ACCESS_TOKEN=your-token
+      - GTUNNEL_TARGET_HOST=app
+      - GTUNNEL_TARGET_PORT=3000
+      - GTUNNEL_BASE_ENDPOINT=/my-app
+      - GTUNNEL_DEBUG=false
+    depends_on:
+      - app
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+EOF
+
+docker-compose up -d
+```
+
+**Environment Variables:**
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `GTUNNEL_SERVER_URL` | gTunnel server URL | `""` | ✅ |
+| `GTUNNEL_ACCESS_TOKEN` | Authentication token | `""` | ❌ |
+| `GTUNNEL_TARGET_HOST` | Target host to tunnel | `localhost` | ❌ |
+| `GTUNNEL_TARGET_PORT` | Target port to tunnel | `3000` | ❌ |
+| `GTUNNEL_BASE_ENDPOINT` | Base endpoint path | `""` | ❌ |
+| `GTUNNEL_DEBUG` | Enable debug logging | `false` | ❌ |
+
 ### Server Installation
 
 #### Option 1: Installation Script (Recommended)
@@ -231,6 +290,35 @@ gtc config --set-token your-token
 
 # View current config
 gtc config show
+```
+
+### Docker Client Usage
+
+**Run client in a container:**
+```bash
+# Basic usage
+docker run --rm \
+  -e GTUNNEL_SERVER_URL="https://your-server.com" \
+  -e GTUNNEL_TARGET_HOST="host.docker.internal" \
+  -e GTUNNEL_TARGET_PORT="3000" \
+  ghcr.io/b-aj-amar/gtunnel-client:latest
+
+# With authentication
+docker run --rm \
+  -e GTUNNEL_SERVER_URL="https://your-server.com" \
+  -e GTUNNEL_ACCESS_TOKEN="your-token" \
+  -e GTUNNEL_TARGET_HOST="host.docker.internal" \
+  -e GTUNNEL_TARGET_PORT="8080" \
+  -e GTUNNEL_BASE_ENDPOINT="/api" \
+  ghcr.io/b-aj-amar/gtunnel-client:latest
+
+# Debug mode
+docker run --rm \
+  -e GTUNNEL_DEBUG="true" \
+  -e GTUNNEL_SERVER_URL="https://your-server.com" \
+  -e GTUNNEL_TARGET_HOST="host.docker.internal" \
+  -e GTUNNEL_TARGET_PORT="3000" \
+  ghcr.io/b-aj-amar/gtunnel-client:latest
 ```
 
 ### Basic Server Usage
@@ -549,7 +637,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Built with [Go](https://golang.org/), [Chi](https://github.com/go-chi/chi), and [Gorilla WebSocket](https://github.com/gorilla/websocket)
+- Built with [Go](https://golang.org/), [Chi](https://github.com/go-chi/chi), [Gorilla WebSocket](https://github.com/gorilla/websocket), and [Cobra](https://github.com/spf13/cobra)
 - Thanks to all contributors and users!
 
 ---
