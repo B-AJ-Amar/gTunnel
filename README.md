@@ -1,6 +1,6 @@
-# gTunnel
+# GTunnel
 
-**gTunnel** is a fast, lightweight tunneling solution written in Go that allows you to expose local services to the internet through a secure tunnel. Similar to [ngrok](https://ngrok.com/) or [VSCode Port-Forwarding](https://code.visualstudio.com/docs/debugtest/port-forwarding), gTunnel provides a simple way to share your local development server with the world.
+**GTunnel** is a fast, lightweight tunneling solution written in Go that allows you to expose local services to the internet through a secure tunnel. Similar to [ngrok](https://ngrok.com/) or [VSCode Port-Forwarding](https://code.visualstudio.com/docs/debugtest/port-forwarding), GTunnel provides a simple way to share your local development server with the world.
 
 ![License](https://img.shields.io/github/license/B-AJ-Amar/gTunnel)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/B-AJ-Amar/gTunnel)
