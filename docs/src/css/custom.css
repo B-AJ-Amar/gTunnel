@@ -6,15 +6,15 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #0066cc;
-  --ifm-color-primary-dark: #0052a3;
-  --ifm-color-primary-darker: #004d99;
-  --ifm-color-primary-darkest: #003d7a;
-  --ifm-color-primary-light: #1975d1;
-  --ifm-color-primary-lighter: #2680d6;
-  --ifm-color-primary-lightest: #4d9fe6;
+  --ifm-color-primary: #108df1;
+  --ifm-color-primary-dark: #0c6bb8;
+  --ifm-color-primary-darker: #0a5a9b;
+  --ifm-color-primary-darkest: #084a7e;
+  --ifm-color-primary-light: #2ea3f4;
+  --ifm-color-primary-lighter: #4cb8f7;
+  --ifm-color-primary-lightest: #87d0fa;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 102, 204, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(16, 141, 241, 0.1);
   
   /* gTunnel Brand Colors */
   --gtunnel-secondary: #f39c12;
@@ -26,14 +26,14 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #4d9fe6;
-  --ifm-color-primary-dark: #3390e3;
-  --ifm-color-primary-darker: #2680d6;
-  --ifm-color-primary-darkest: #0066cc;
-  --ifm-color-primary-light: #66b3e9;
-  --ifm-color-primary-lighter: #80c7ec;
-  --ifm-color-primary-lightest: #b3def5;
-  --docusaurus-highlighted-code-line-bg: rgba(77, 159, 230, 0.3);
+  --ifm-color-primary: #87d0fa;
+  --ifm-color-primary-dark: #4cb8f7;
+  --ifm-color-primary-darker: #2ea3f4;
+  --ifm-color-primary-darkest: #108df1;
+  --ifm-color-primary-light: #a5dcfb;
+  --ifm-color-primary-lighter: #c3e8fc;
+  --ifm-color-primary-lightest: #e1f4fe;
+  --docusaurus-highlighted-code-line-bg: rgba(16, 141, 241, 0.3);
 }
 
 /* Search functionality styling */

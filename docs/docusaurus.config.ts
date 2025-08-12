@@ -161,11 +161,11 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} gTunnel. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} gTunnel.`,
     },
     prism: {
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      darkTheme: prismThemes.oneDark,
       additionalLanguages: ['bash', 'go', 'yaml', 'json', 'docker'],
     },
   } satisfies Preset.ThemeConfig,
