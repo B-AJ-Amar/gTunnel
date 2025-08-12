@@ -1,0 +1,131 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #0066cc;
+  --ifm-color-primary-dark: #0052a3;
+  --ifm-color-primary-darker: #004d99;
+  --ifm-color-primary-darkest: #003d7a;
+  --ifm-color-primary-light: #1975d1;
+  --ifm-color-primary-lighter: #2680d6;
+  --ifm-color-primary-lightest: #4d9fe6;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 102, 204, 0.1);
+  
+  /* gTunnel Brand Colors */
+  --gtunnel-secondary: #f39c12;
+  --gtunnel-success: #27ae60;
+  --gtunnel-info: #3498db;
+  --gtunnel-warning: #f39c12;
+  --gtunnel-danger: #e74c3c;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #4d9fe6;
+  --ifm-color-primary-dark: #3390e3;
+  --ifm-color-primary-darker: #2680d6;
+  --ifm-color-primary-darkest: #0066cc;
+  --ifm-color-primary-light: #66b3e9;
+  --ifm-color-primary-lighter: #80c7ec;
+  --ifm-color-primary-lightest: #b3def5;
+  --docusaurus-highlighted-code-line-bg: rgba(77, 159, 230, 0.3);
+}
+
+/* Search functionality styling */
+.DocSearch-Button {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  color: var(--ifm-color-content);
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.DocSearch-Button:hover {
+  background: var(--ifm-color-emphasis-200);
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .DocSearch-Button {
+  background: var(--ifm-color-emphasis-200);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+[data-theme='dark'] .DocSearch-Button:hover {
+  background: var(--ifm-color-emphasis-300);
+  border-color: var(--ifm-color-primary);
+}
+
+/* Search modal styling */
+.DocSearch-Modal {
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='dark'] .DocSearch-Modal {
+  background: var(--ifm-background-surface-color);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Search hit highlighting */
+.DocSearch-Hit-source {
+  background: var(--ifm-color-primary);
+  color: white;
+  font-weight: 600;
+}
+
+.DocSearch-Hit-title mark,
+.DocSearch-Hit-content mark {
+  background: var(--ifm-color-primary-lightest);
+  color: var(--ifm-color-primary-darkest);
+}
+
+[data-theme='dark'] .DocSearch-Hit-title mark,
+[data-theme='dark'] .DocSearch-Hit-content mark {
+  background: var(--ifm-color-primary-darkest);
+  color: var(--ifm-color-primary-lightest);
+}
+
+/* Search keyboard shortcuts */
+.DocSearch-Button-Keys {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.DocSearch-Button-Key {
+  background: var(--ifm-color-emphasis-200);
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: 3px;
+  color: var(--ifm-color-content-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.125rem 0.25rem;
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+[data-theme='dark'] .DocSearch-Button-Key {
+  background: var(--ifm-color-emphasis-300);
+  border-color: var(--ifm-color-emphasis-500);
+}
+
+/* Smooth transitions for search */
+.DocSearch-Button,
+.DocSearch-Button-Key,
+.search-bar {
+  transition: all 0.2s ease;
+}
+
+/* Search focus states for accessibility */
+.DocSearch-Button:focus,
+.search-bar:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}

@@ -230,7 +230,7 @@ handle_error() {
 
 # Main installation function
 main() {
-    echo -e "${GREEN}"
+    echo -e "${BLUE}"
     echo "  ____  _____                        _ "
     echo " / ___|_   _|   _ _ __  _ __   ___| |"
     echo "| |  _  | || | | | '_ \| '_ \ / _ \ |"
@@ -239,8 +239,8 @@ main() {
     echo ""
     echo "Fast, lightweight tunneling solution"
     echo -e "${NC}"
-    echo -e "${GREEN}gTunnel Installation Script${NC}"
-    echo -e "${GREEN}============================${NC}"
+    echo -e "${BLUE}gTunnel Installation Script${NC}"
+    echo -e "${BLUE}============================${NC}"
     echo ""
     
     # Set error trap

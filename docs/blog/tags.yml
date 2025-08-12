@@ -1,0 +1,89 @@
+announcement:
+  label: Announcement
+  permalink: /announcement
+  description: Official announcements and project updates
+
+getting-started:
+  label: Getting Started
+  permalink: /getting-started
+  description: Beginner-friendly guides and tutorials
+
+tunneling:
+  label: Tunneling
+  permalink: /tunneling
+  description: HTTP tunneling and networking topics
+
+go:
+  label: Go
+  permalink: /go
+  description: Go programming language related content
+
+docker:
+  label: Docker
+  permalink: /docker
+  description: Docker containerization and deployment
+
+development:
+  label: Development
+  permalink: /development
+  description: Software development and programming
+
+networking:
+  label: Networking
+  permalink: /networking
+  description: Network protocols and infrastructure
+
+security:
+  label: Security
+  permalink: /security
+  description: Security features and best practices
+
+deployment:
+  label: Deployment
+  permalink: /deployment
+  description: Deployment guides and production setup
+
+tutorial:
+  label: Tutorial
+  permalink: /tutorial
+  description: Step-by-step tutorials and how-to guides
+
+websockets:
+  label: WebSockets
+  permalink: /websockets
+  description: WebSocket technology and implementation
+
+api:
+  label: API
+  permalink: /api
+  description: API development and integration
+
+cli:
+  label: CLI
+  permalink: /cli
+  description: Command-line interface and tools
+
+opensource:
+  label: Open Source
+  permalink: /opensource
+  description: Open source development and community
+
+performance:
+  label: Performance
+  permalink: /performance
+  description: Performance optimization and benchmarks
+
+devops:
+  label: DevOps
+  permalink: /devops
+  description: DevOps practices and automation
+
+release:
+  label: Release
+  permalink: /release
+  description: Version releases and changelogs
+
+github:
+  label: GitHub
+  permalink: /github
+  description: GitHub features and workflows
