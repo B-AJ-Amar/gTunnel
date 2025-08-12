@@ -67,9 +67,10 @@ curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/insta
 
 ```bash
 # Expose your local port 3000
-gtc connect -u https://demo.gtunnel.dev 3000
+# https://gtunnel-server-1i1b.onrender.com is the default server for the version v0.0.0
+gtc connect -u https://gtunnel-server-1i1b.onrender.com -e /my-app 3000
 
-# Your app is now available at: https://demo.gtunnel.dev/your-tunnel-id
+# Your app is now available at: https://gtunnel-server-1i1b.onrender.com/my-app
 ```
 
 ### 3. Deploy Your Own Server (Optional)
