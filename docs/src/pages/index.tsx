@@ -51,7 +51,7 @@ function HomepageHeader() {
             <Heading as="h1" className={styles.heroTitle}>
               Fast & Secure
               <br />
-              <span className={styles.highlight}>HTTP Tunneling</span>
+              <span className={styles.highlight}>Dev Tunnel</span>
             </Heading>
             <p className={styles.heroSubtitle}>
               Expose your local development servers to the internet instantly. 
