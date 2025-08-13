@@ -51,17 +51,17 @@ gTunnel consists of two main components:
 - [Client Configuration](./client-config) - Configure the client component
 - [Server Configuration](./server-config) - Configure the server component
 - [Authentication](./security) - Security and authentication options
-- [Routing](./routing) - Traffic routing and management
+<!-- - [Routing](./routing) - Traffic routing and management -->
 
 ### Deployment
 - [Docker Deployment](./docker) - Deploy with Docker and Docker Compose
-- [Production Setup](./production) - Production deployment guide
-- [Monitoring](./monitoring) - Monitoring and observability
+<!-- - [Production Setup](./production) - Production deployment guide -->
+<!-- - [Monitoring](./monitoring) - Monitoring and observability -->
 
 ### Advanced Topics
-- [Custom Protocols](./protocols) - Support for custom protocols
-- [Load Balancing](./load-balancing) - Scale with multiple servers
-- [API Reference](./api) - REST API documentation
+<!-- - [Custom Protocols](./protocols) - Support for custom protocols -->
+<!-- - [Load Balancing](./load-balancing) - Scale with multiple servers -->
+<!-- - [API Reference](./api) - REST API documentation -->
 - [Troubleshooting](./troubleshooting) - Common issues and solutions
 
 ## Community & Support
@@ -69,7 +69,7 @@ gTunnel consists of two main components:
 - 📋 [FAQ](./faq) - Frequently asked questions
 - 🐛 [Issue Tracker](https://github.com/B-AJ-Amar/gTunnel/issues) - Report bugs and request features  
 - 💬 [Discussions](https://github.com/B-AJ-Amar/gTunnel/discussions) - Community discussions
-- 📖 [Contributing](./contributing) - How to contribute to the project
+<!-- - 📖 [Contributing](./contributing) - How to contribute to the project -->
 
 ## Version Information
 

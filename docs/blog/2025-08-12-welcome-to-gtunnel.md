@@ -2,7 +2,7 @@
 slug: welcome-to-gtunnel
 title: Welcome to gTunnel!
 authors: [amar]
-tags: [announcement, getting-started, wellcome]
+tags: [announcement, getting-started, welcome]
 ---
 
 We're excited to introduce **gTunnel** - a fast, secure, and lightweight HTTP tunneling solution built with Go! 🚀
