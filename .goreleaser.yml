@@ -1,0 +1,140 @@
+project_name: gtunnel
+
+release:
+  github:
+    owner: B-AJ-Amar
+    name: gtunnel
+
+builds:
+  - id: gtunnel-client
+    main: ./cmd/client
+    binary: gtc
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - "386"
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    dir: .
+    ldflags:
+      - -s -w
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.Version={{.Version}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GitCommit={{.ShortCommit}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.BuildDate={{.Date}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion=1.23.5
+
+  - id: gtunnel-server
+    main: ./cmd/server
+    binary: gts
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - "386"
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    dir: .
+    ldflags:
+      - -s -w
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.Version={{.Version}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GitCommit={{.ShortCommit}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.BuildDate={{.Date}}
+      - -X github.com/B-AJ-Amar/gTunnel/internal/pkg.GoVersion=1.23.5
+
+archives:
+  - id: client-archive
+    builds:
+      - gtunnel-client
+    format_overrides:
+      - goos: windows
+        format: zip
+    format: tar.gz
+    name_template: "{{ .ProjectName }}-client_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    wrap_in_directory: true
+
+  - id: server-archive
+    builds:
+      - gtunnel-server
+    format_overrides:
+      - goos: windows
+        format: zip
+    format: tar.gz
+    name_template: "{{ .ProjectName }}-server_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    wrap_in_directory: true
+
+nfpms:
+  - id: linux-packages
+    formats:
+      - deb
+      - rpm
+      - apk
+    bindir: /usr/bin
+    builds:
+      - gtunnel-client
+      - gtunnel-server
+    section: default
+    maintainer: "B-AJ-Amar <amarbouakaz91@gmail.com>"
+    description: "gTunnel is a fast, lightweight tunneling solution"
+    license: MIT
+    homepage: "https://github.com/B-AJ-Amar/gTunnel"
+
+dockers:
+  - id: gtunnel-server
+    image_templates:
+      - "ghcr.io/b-aj-amar/gtunnel-server:{{ .Version }}"
+      - "ghcr.io/b-aj-amar/gtunnel-server:latest"
+    dockerfile: Dockerfile.server
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}-server"
+      - "--label=org.opencontainers.image.description=gTunnel Server - Fast, lightweight tunneling solution"
+      - "--label=org.opencontainers.image.url=https://github.com/B-AJ-Amar/gTunnel"
+      - "--label=org.opencontainers.image.source=https://github.com/B-AJ-Amar/gTunnel"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+    extra_files:
+      - go.mod
+      - go.sum
+      - cmd/
+      - internal/
+      - Makefile
+
+  - id: gtunnel-client
+    image_templates:
+      - "ghcr.io/b-aj-amar/gtunnel-client:{{ .Version }}"
+      - "ghcr.io/b-aj-amar/gtunnel-client:latest"
+    dockerfile: Dockerfile.client
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}-client"
+      - "--label=org.opencontainers.image.description=gTunnel Client - Fast, lightweight tunneling solution for microservices"
+      - "--label=org.opencontainers.image.url=https://github.com/B-AJ-Amar/gTunnel"
+      - "--label=org.opencontainers.image.source=https://github.com/B-AJ-Amar/gTunnel"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+    extra_files:
+      - go.mod
+      - go.sum
+      - cmd/
+      - internal/
+      - Makefile
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
