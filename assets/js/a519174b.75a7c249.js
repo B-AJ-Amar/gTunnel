@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkgtunnel_docs=self.webpackChunkgtunnel_docs||[]).push([[229],{4815:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/gTunnel/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);

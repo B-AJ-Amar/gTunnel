@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="rss.xsl"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>gTunnel Blog</title>
+        <link>https://b-aj-amar.github.io/gTunnel/blog</link>
+        <description>gTunnel Blog</description>
+        <lastBuildDate>Tue, 12 Aug 2025 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[Welcome to gTunnel!]]></title>
+            <link>https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel</link>
+            <guid>https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel</guid>
+            <pubDate>Tue, 12 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[We're excited to introduce gTunnel - a fast, secure, and lightweight HTTP tunneling solution built with Go! 🚀]]></description>
+            <content:encoded><![CDATA[<p>We're excited to introduce <strong>gTunnel</strong> - a fast, secure, and lightweight HTTP tunneling solution built with Go! 🚀</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="what-is-gtunnel">What is gTunnel?<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#what-is-gtunnel" class="hash-link" aria-label="Direct link to What is gTunnel?" title="Direct link to What is gTunnel?">​</a></h2>
+<p>gTunnel makes it incredibly easy to expose your local development servers to the internet securely. Whether you're:</p>
+<ul>
+<li>👥 <strong>Collaborating with teammates</strong> on a local development server</li>
+<li>🔗 <strong>Testing webhooks</strong> from external services</li>
+<li>🎯 <strong>Demoing your application</strong> to clients or stakeholders</li>
+<li>🧪 <strong>Debugging integrations</strong> with third-party APIs</li>
+</ul>
+<p>gTunnel has you covered with a simple, fast, and secure tunneling solution.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="key-features">Key Features<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#key-features" class="hash-link" aria-label="Direct link to Key Features" title="Direct link to Key Features">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-high-performance">🚀 High Performance<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#-high-performance" class="hash-link" aria-label="Direct link to 🚀 High Performance" title="Direct link to 🚀 High Performance">​</a></h3>
+<p>Built with Go, gTunnel delivers exceptional performance with minimal resource usage. Handle thousands of concurrent connections without breaking a sweat.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-security-first">🔒 Security First<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#-security-first" class="hash-link" aria-label="Direct link to 🔒 Security First" title="Direct link to 🔒 Security First">​</a></h3>
+<ul>
+<li>WebSocket-based secure tunneling</li>
+<li>Authentication and authorization support</li>
+<li>No data logging or storage</li>
+<li>Self-hosted options for complete control</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-docker-ready">🐳 Docker Ready<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#-docker-ready" class="hash-link" aria-label="Direct link to 🐳 Docker Ready" title="Direct link to 🐳 Docker Ready">​</a></h3>
+<p>Full Docker support with multi-architecture images available on GitHub Container Registry:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token function" style="color:#d73a49">docker</span><span class="token plain"> run ghcr.io/b-aj-amar/gtunnel-server:latest</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-developer-friendly">🎯 Developer Friendly<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#-developer-friendly" class="hash-link" aria-label="Direct link to 🎯 Developer Friendly" title="Direct link to 🎯 Developer Friendly">​</a></h3>
+<ul>
+<li>One-command installation</li>
+<li>Minimal configuration required</li>
+<li>Comprehensive CLI with helpful commands</li>
+<li>Detailed documentation and examples</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="quick-start">Quick Start<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#quick-start" class="hash-link" aria-label="Direct link to Quick Start" title="Direct link to Quick Start">​</a></h2>
+<p>Get started in under 2 minutes:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Install gTunnel (On the server)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token function" style="color:#d73a49">curl</span><span class="token plain"> </span><span class="token parameter variable" style="color:#36acaa">-sSL</span><span class="token plain"> https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">bash</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Start the server</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">gts start </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># on the client side ====================</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Connect your local service</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">gtc connect </span><span class="token parameter variable" style="color:#36acaa">-u</span><span class="token plain"> your-domain </span><span class="token number" style="color:#36acaa">3000</span><br></span></code></pre></div></div>
+<p>That's it! Your local service is now accessible through the tunnel.</p>
+<p><strong>Want more detailed instructions?</strong> Check out our comprehensive <a href="https://b-aj-amar.github.io/gTunnel/quick-start">Quick Start Guide</a> for step-by-step setup, Docker usage, and common use cases.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="getting-involved">Getting Involved<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#getting-involved" class="hash-link" aria-label="Direct link to Getting Involved" title="Direct link to Getting Involved">​</a></h2>
+<p>gTunnel is open source and we welcome contributions! Here's how you can get involved:</p>
+<ul>
+<li>⭐ <strong>Star us on GitHub</strong> to show your support</li>
+<li>🐛 <strong>Report issues</strong> or suggest features</li>
+<li>💻 <strong>Contribute code</strong> with pull requests</li>
+<li>📖 <strong>Improve documentation</strong> and examples</li>
+<li>💬 <strong>Join discussions</strong> in our GitHub community</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="resources">Resources<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#resources" class="hash-link" aria-label="Direct link to Resources" title="Direct link to Resources">​</a></h2>
+<ul>
+<li>📚 <a href="https://b-aj-amar.github.io/gTunnel/quick-start">Quick Start Guide</a> - Get running in 5 minutes</li>
+<li>📖 <a href="https://b-aj-amar.github.io/gTunnel/docs/intro">Full Documentation</a> - Comprehensive guides</li>
+<li>🔧 <a href="https://github.com/B-AJ-Amar/gTunnel" target="_blank" rel="noopener noreferrer">GitHub Repository</a> - Source code</li>
+<li>🐳 <a href="https://ghcr.io/b-aj-amar/gtunnel-server" target="_blank" rel="noopener noreferrer">Docker Images</a> - Container images</li>
+<li>💬 <a href="https://github.com/B-AJ-Amar/gTunnel/discussions" target="_blank" rel="noopener noreferrer">Discussions</a> - Community support</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="thank-you">Thank You<a href="https://b-aj-amar.github.io/gTunnel/blog/welcome-to-gtunnel#thank-you" class="hash-link" aria-label="Direct link to Thank You" title="Direct link to Thank You">​</a></h2>
+<p>Thank you for trying gTunnel! We're committed to making tunneling simple, secure, and accessible for all developers.</p>
+<p>Have questions or feedback? We'd love to hear from you in our <a href="https://github.com/B-AJ-Amar/gTunnel/discussions" target="_blank" rel="noopener noreferrer">GitHub discussions</a>!</p>
+<p>Happy tunneling! 🚇✨</p>]]></content:encoded>
+            <category>Announcement</category>
+            <category>Getting Started</category>
+            <category>wellcome</category>
+        </item>
+    </channel>
+</rss>
