@@ -3,9 +3,143 @@
  * and scoped locally.
  */
 
+/* Landing Page Specific Navbar Styling */
+:global(.navbar--landing-transparent) {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border-bottom: none !important;
+  border-top: none !important;
+  border: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  /* Keep essential positioning */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+}
+
+:global(.navbar--landing-transparent):before,
+:global(.navbar--landing-transparent):after {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+:global(.navbar--landing-transparent) :global(.navbar__inner) {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 0 1rem !important;
+}
+
+:global(.navbar--landing-transparent) :global(.navbar__brand) {
+  border: none !important;
+  outline: none !important;
+}
+
+:global(.navbar--landing-transparent) :global(.navbar__items) {
+  border: none !important;
+  outline: none !important;
+}
+
+:global(.navbar--landing-transparent) :global(.navbar__toggle) {
+  border: none !important;
+  outline: none !important;
+}
+
+:global(.navbar--landing-transparent) :global(.navbar__link) {
+  color: #1a1a1a !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+:global([data-theme='dark']) :global(.navbar--landing-transparent) :global(.navbar__link) {
+  color: #ffffff !important;
+}
+
+:global(.navbar--landing-transparent) :global(.navbar__link:hover) {
+  color: #108df1 !important;
+  text-decoration: none !important;
+}
+
+:global(.navbar--landing-transparent) :global(.navbar__title) {
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease !important;
+}
+
+:global([data-theme='dark']) :global(.navbar--landing-transparent) :global(.navbar__title) {
+  color: #ffffff !important;
+}
+
+/* Scrolled navbar state for landing page */
+:global(.navbar--landing-scrolled) {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+:global([data-theme='dark']) :global(.navbar--landing-scrolled) {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-bottom-color: rgba(255, 255, 255 ) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0), 0 1px 2px 0 rgba(0, 0, 0) !important;
+}
+
+/* Landing page body adjustments */
+:global(body.landing-page) {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  border-top: none !important;
+}
+
+:global(html) {
+  margin-top: 0 !important;
+  border-top: none !important;
+}
+
+/* Keep navbar sticky but transparent on landing page */
+:global(.landing-page) :global(.navbar--fixed-top) {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+}
+
+/* Additional navbar reset for landing page */
+:global(.navbar--landing-transparent.navbar--fixed-top) {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Target only border-related properties, not layout */
+:global(.navbar--landing-transparent) :global(.navbar__inner) {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Hero Section - React-style Enhanced Design */
 .heroBanner {
-  padding: 6rem 0 8rem 0;
+  padding: 8rem 0 8rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -14,6 +148,8 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
+  margin-top: 0;
+  padding-top: 8rem;
 }
 
 .heroBanner::before {
@@ -118,6 +254,7 @@
 
 .highlight {
   background: linear-gradient(135deg, #108df1 0%, #0c6bb8 100%);
+  /* background: #108df1 ; */
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -652,7 +789,7 @@
 /* Responsive Design - Minimal */
 @media screen and (max-width: 768px) {
   .heroBanner {
-    padding: 4rem 0 6rem 0;
+    padding: 6rem 0 6rem 0;
   }
   
   .heroTitle {

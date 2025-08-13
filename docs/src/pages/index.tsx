@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import ScrollNavbar from '@site/src/components/ScrollNavbar';
 import { 
   Globe, 
   Shield, 
@@ -264,6 +265,7 @@ export default function Home(): ReactNode {
     <Layout
       title="Fast & Secure HTTP Tunneling"
       description="gTunnel - Fast, secure, and lightweight HTTP tunneling solution built with Go. Expose your local development servers to the internet instantly.">
+      <ScrollNavbar />
       <HomepageHeader />
       <main>
         <FeaturesSection />
