@@ -3,7 +3,7 @@
  * and scoped locally.
  */
 
-/* Hero Section - Enhanced Minimal Design */
+/* Hero Section - React-style Enhanced Design */
 .heroBanner {
   padding: 6rem 0 8rem 0;
   text-align: center;
@@ -11,6 +11,9 @@
   overflow: hidden;
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   color: #1a1a1a;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
 }
 
 .heroBanner::before {
@@ -21,9 +24,28 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(16, 141, 241, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(16, 141, 241, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(16, 141, 241, 0.02) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(16, 141, 241, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(16, 141, 241, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(16, 141, 241, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+}
+
+.heroBanner::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(16, 141, 241, 0.01) 2px,
+    rgba(16, 141, 241, 0.01) 4px
+  );
+  animation: drift 20s linear infinite;
   pointer-events: none;
 }
 
@@ -34,9 +56,19 @@
 
 [data-theme='dark'] .heroBanner::before {
   background: 
-    radial-gradient(circle at 20% 20%, rgba(16, 141, 241, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(16, 141, 241, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(16, 141, 241, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(16, 141, 241, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(16, 141, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(16, 141, 241, 0.08) 0%, transparent 50%);
+}
+
+[data-theme='dark'] .heroBanner::after {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(16, 141, 241, 0.02) 2px,
+    rgba(16, 141, 241, 0.02) 4px
+  );
 }
 
 .heroContent {
@@ -44,6 +76,23 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.heroLogo {
+  width: 80px;
+  height: 80px;
+  transition: all 0.3s ease;
+}
+
+.heroLogo:hover {
+  transform: scale(1.05) rotate(5deg);
 }
 
 .heroTitle {
@@ -112,10 +161,39 @@
 .buttons .button--primary {
   background: linear-gradient(135deg, #108df1 0%, #0c6bb8 100%);
   border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.buttons .button--primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.buttons .button--primary:hover::before {
+  left: 100%;
 }
 
 .buttons .button--primary:hover {
   background: linear-gradient(135deg, #0c6bb8 0%, #0a5a9b 100%);
+  transform: translateY(-2px);
+}
+
+.buttonIcon {
+  transition: transform 0.3s ease;
+}
+
+.buttons .button--primary:hover .buttonIcon {
+  transform: translateX(4px);
 }
 
 .quickDemo {
@@ -287,28 +365,45 @@
 }
 
 .featureCard {
-  background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid #f3f4f6;
-  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
   overflow: hidden;
+  position: relative;
+}
+
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #108df1 0%, #0c6bb8 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.featureCard:hover::before {
+  transform: scaleX(1);
 }
 
 [data-theme='dark'] .featureCard {
-  background: #1e293b;
-  border-color: #334155;
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(51, 65, 85, 0.3);
 }
 
 .featureCard:hover {
-  border-color: #0066cc;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(16, 141, 241, 0.15);
+  border-color: rgba(16, 141, 241, 0.3);
 }
 
 [data-theme='dark'] .featureCard:hover {
-  border-color: #4d9fe6;
-  box-shadow: 0 4px 12px rgba(77, 159, 230, 0.2);
+  box-shadow: 0 20px 40px rgba(16, 141, 241, 0.25);
 }
 
 .featureIconContainer {
@@ -645,5 +740,23 @@
   }
   50% {
     opacity: 0.8;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translateX(-50%) translateY(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50%) rotate(360deg);
   }
 }

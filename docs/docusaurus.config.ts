@@ -105,13 +105,14 @@ const config: Config = {
         },
         {
           href: 'https://github.com/B-AJ-Amar/gTunnel',
-          label: 'GitHub',
           position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
       ],
     },
     footer: {
-      style: 'dark',
+      // style: 'dark',
       links: [
         {
           title: 'Docs',
