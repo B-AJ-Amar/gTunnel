@@ -1,89 +1,94 @@
 announcement:
   label: Announcement
-  permalink: /announcement
+  permalink: /tags/announcement
   description: Official announcements and project updates
+
+welcome:
+  label: Welcome
+  permalink: /tags/welcome
+  description: Introduction and welcome messages
 
 getting-started:
   label: Getting Started
-  permalink: /getting-started
+  permalink: /tags/getting-started
   description: Beginner-friendly guides and tutorials
 
 tunneling:
   label: Tunneling
-  permalink: /tunneling
+  permalink: /tags/tunneling
   description: HTTP tunneling and networking topics
 
 go:
   label: Go
-  permalink: /go
+  permalink: /tags/go
   description: Go programming language related content
 
 docker:
   label: Docker
-  permalink: /docker
+  permalink: /tags/docker
   description: Docker containerization and deployment
 
 development:
   label: Development
-  permalink: /development
+  permalink: /tags/development
   description: Software development and programming
 
 networking:
   label: Networking
-  permalink: /networking
+  permalink: /tags/networking
   description: Network protocols and infrastructure
 
 security:
   label: Security
-  permalink: /security
+  permalink: /tags/security
   description: Security features and best practices
 
 deployment:
   label: Deployment
-  permalink: /deployment
+  permalink: /tags/deployment
   description: Deployment guides and production setup
 
 tutorial:
   label: Tutorial
-  permalink: /tutorial
+  permalink: /tags/tutorial
   description: Step-by-step tutorials and how-to guides
 
 websockets:
   label: WebSockets
-  permalink: /websockets
+  permalink: /tags/websockets
   description: WebSocket technology and implementation
 
 api:
   label: API
-  permalink: /api
+  permalink: /tags/api
   description: API development and integration
 
 cli:
   label: CLI
-  permalink: /cli
+  permalink: /tags/cli
   description: Command-line interface and tools
 
 opensource:
   label: Open Source
-  permalink: /opensource
+  permalink: /tags/opensource
   description: Open source development and community
 
 performance:
   label: Performance
-  permalink: /performance
+  permalink: /tags/performance
   description: Performance optimization and benchmarks
 
 devops:
   label: DevOps
-  permalink: /devops
+  permalink: /tags/devops
   description: DevOps practices and automation
 
 release:
   label: Release
-  permalink: /release
+  permalink: /tags/release
   description: Version releases and changelogs
 
 github:
   label: GitHub
-  permalink: /github
+  permalink: /tags/github
   description: GitHub features and workflows

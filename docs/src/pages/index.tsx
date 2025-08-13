@@ -3,6 +3,7 @@ import {useState} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import ScrollNavbar from '@site/src/components/ScrollNavbar';
@@ -44,7 +45,7 @@ function HomepageHeader() {
           <div className={styles.heroText}>
             <div className={styles.logoContainer}>
               <img 
-                src="/img/logo.png" 
+                src={useBaseUrl('/img/logo.png')}
                 alt="gTunnel Logo" 
                 className={styles.heroLogo}
               />
