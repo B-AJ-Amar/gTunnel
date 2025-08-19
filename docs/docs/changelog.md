@@ -1,5 +1,5 @@
-<!-- ---
-sidebar_position: 35
+---
+sidebar_position: 29
 ---
 
 # Changelog
@@ -11,46 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Initial documentation site
-- Comprehensive configuration examples
-- CLI reference documentation
+- Future improvements coming soon...
 
-### Changed
-- Updated build process
-- Improved error handling
+## [v0.0.0] - 2025-08-10
 
-### Fixed
-- Minor bug fixes
-
-## [0.1.0] - 2025-08-13
+🎉 **FIRST RELEASE!**
 
 ### Added
-- Initial release of gTunnel
-- Client and server components
-- Basic HTTP tunneling functionality
-- WebSocket-based communication
+- gTunnel Client (`gtc`) - Connect and tunnel local services
+- gTunnel Server (`gts`) - Host and manage tunnel connections  
+- WebSocket-based tunneling with automatic fallback
 - Token-based authentication
-- Subdomain support
-- Docker support
-- CLI interface for both client and server
+- Configuration management via CLI commands
+- Environment variable support for containerized deployments
+- Docker images for both client and server
+- Cross-platform support (Linux, macOS, Windows)
 
-### Features
-- Fast, lightweight HTTP tunneling
-- WebSocket connections for reliability
-- Simple configuration via YAML files
-- Self-hosted infrastructure support
-- Cross-platform compatibility (Linux, macOS, Windows)
-
-### Documentation
-- Comprehensive user documentation
-- Installation guides
-- Configuration examples
-- API reference
-- Troubleshooting guides
 
 ---
 
-**Note:** This is the initial release of gTunnel. More features and improvements are planned for future releases.
-
-For older versions and detailed change history, see the [Git commit history](https://github.com/B-AJ-Amar/gTunnel/commits). -->
+For detailed changes and commits, see the [Git history](https://github.com/B-AJ-Amar/gTunnel/commits).

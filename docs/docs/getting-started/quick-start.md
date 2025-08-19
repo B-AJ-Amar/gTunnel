@@ -1,3 +1,6 @@
+---
+sidebar_position: 1
+---
 # Quick Start
 
 Get up and running with gTunnel in minutes! This guide will walk you through installing and setting up a basic HTTP tunnel.

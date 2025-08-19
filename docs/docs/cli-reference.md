@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 4
 ---
 
 # CLI Reference
@@ -8,227 +8,331 @@ Complete command-line interface reference for gTunnel client and server componen
 
 ## Client Commands
 
-### gtunnel-client
+### gtc (gTunnel Client)
 
 The gTunnel client connects to a gTunnel server and forwards local traffic through the tunnel.
 
 #### Basic Usage
 
 ```bash
-gtunnel-client connect [flags]
+gtc [command]
 ```
 
 #### Global Flags
 
-- `--config`, `-c`: Configuration file path (default: `~/.gtunnel/client.yml`)
 - `--help`, `-h`: Show help information
-- `--version`, `-v`: Show version information
+- `--version`: Show version information
 
-#### Connect Command
+### Available Commands
+
+#### connect
 
 Connect to a gTunnel server and start tunneling.
 
 ```bash
-gtunnel-client connect --server wss://tunnel.example.com --port 8080
+gtc connect <port|host:port> [flags]
+```
+
+**Arguments:**
+- `<port|host:port>`: The local service to tunnel
+  - Port only: `3000` (defaults to localhost:3000)
+  - Host and port: `myapp.local:3000`
+
+**Flags:**
+- `--server-url`, `-u`: Server URL (without WebSocket endpoint, e.g., example.com:443)
+- `--base-endpoint`, `-e`: Base endpoint path to route the tunneled app
+- `--debug`, `-d`: Enable debug logging
+
+**Examples:**
+```bash
+# Tunnel to localhost:3000
+gtc connect 3000
+
+# Tunnel to a specific host and port
+gtc connect api.example.com:8080
+
+# Override server URL for this connection
+gtc connect -u example.com:9000 3000
+
+# Use HTTPS URL (automatically uses port 443)
+gtc connect -u https://example.com 3000
+
+# Enable debug logging
+gtc connect -d 3000
+```
+
+:::note
+- The WebSocket endpoint (`/___gTl___/ws`) is automatically appended
+- For HTTPS URLs, port 443 is automatically used if no port is specified
+- Server URL is loaded from configuration if not provided via flag
+:::
+
+#### config
+
+Manage client configuration settings.
+
+```bash
+gtc config [flags]
 ```
 
 **Flags:**
-- `--server`, `-s`: Server WebSocket URL (required)
-- `--port`, `-p`: Local port to tunnel (required)
-- `--host`: Local host to tunnel (default: `localhost`)
-- `--subdomain`: Requested subdomain
-- `--auth-token`: Authentication token
-- `--insecure`: Skip TLS verification
+- `--show`, `-s`: Show current configuration
+- `--set-url`, `-u`: Set the server URL
+- `--set-token`, `-t`: Set the access token
 
-#### Configuration Command
-
-Manage client configuration.
-
+**Examples:**
 ```bash
-gtunnel-client config [subcommand]
+# Show current configuration
+gtc config
+gtc config --show
+
+# Set server URL (protocol and endpoint will be cleaned)
+gtc config --set-url example.com:8080
+gtc config --set-url ws://example.com:8080/ws
+
+# Set access token
+gtc config --set-token abc123def456
 ```
 
-**Subcommands:**
-- `init`: Initialize configuration file
-- `show`: Show current configuration
-- `edit`: Edit configuration file
+:::tip
+- URLs are automatically cleaned (protocols and endpoints removed)
+- Configuration is stored in `~/.config/gtunnel/config.yaml`
+:::
 
-#### Status Command
+#### status
 
-Show client status and active tunnels.
+Display client connection status to the gTunnel server.
 
 ```bash
-gtunnel-client status
+gtc status [flags]
 ```
 
-#### Version Command
+**Flags:**
+- `--verbose`, `-v`: Show detailed connection information
+
+**Examples:**
+```bash
+# Show basic connection status
+gtc status
+
+# Show detailed information including response time and HTTP status
+gtc status -v
+```
+
+:::info Output
+- **Basic**: Shows if connected or not
+- **Verbose**: Includes server URL, response time, and HTTP status details
+:::
+
+#### version
 
 Show version information.
 
 ```bash
-gtunnel-client version
+gtc version [flags]
+```
+
+**Flags:**
+- `--output`, `-o`: Output format. One of: `default|json|short`
+
+**Examples:**
+```bash
+# Show default version info
+gtc version
+
+# Show JSON format
+gtc version -o json
+
+# Show only version number
+gtc version -o short
+```
+
+#### completion
+
+Generate shell autocompletion script.
+
+```bash
+gtc completion [bash|zsh|fish|powershell]
+```
+
+**Examples:**
+```bash
+# Generate bash completion
+gtc completion bash
+
+# Generate zsh completion
+gtc completion zsh
 ```
 
 ## Server Commands
 
-### gtunnel-server
+### gts (gTunnel Server)
 
 The gTunnel server handles incoming tunnel connections and routes traffic.
 
 #### Basic Usage
 
 ```bash
-gtunnel-server start [flags]
+gts [command]
 ```
 
 #### Global Flags
 
-- `--config`, `-c`: Configuration file path (default: `/etc/gtunnel/server.yml`)
 - `--help`, `-h`: Show help information
-- `--version`, `-v`: Show version information
+- `--version`: Show version information
 
-#### Start Command
+### Available Commands
+
+#### start
 
 Start the gTunnel server.
 
 ```bash
-gtunnel-server start --port 8080 --domain tunnel.example.com
+gts start [flags]
 ```
 
 **Flags:**
-- `--port`, `-p`: Server port (default: `8080`)
-- `--domain`, `-d`: Server domain
-- `--tls-cert`: TLS certificate file
-- `--tls-key`: TLS private key file
-- `--auth-required`: Require authentication
-- `--max-connections`: Maximum client connections
+- `--bind-address`: Address to bind the server to (default: `0.0.0.0:7205`)
+- `--debug`, `-d`: Enable debug logging
 
-#### Configuration Command
-
-Manage server configuration.
-
+**Examples:**
 ```bash
-gtunnel-server config [subcommand]
+# Start server with default settings
+gts start
+
+# Start server on specific address and port
+gts start --bind-address 0.0.0.0:8080
+
+# Start server with debug logging
+gts start -d
 ```
 
-**Subcommands:**
-- `init`: Initialize configuration file
-- `show`: Show current configuration
-- `edit`: Edit configuration file
+#### config
 
-#### Status Command
-
-Show server status and connected clients.
+Manage server configuration settings.
 
 ```bash
-gtunnel-server status
+gts config [flags]
 ```
 
-#### Version Command
+**Flags:**
+- `--show`, `-s`: Show current configuration
+- `--set-token`, `-t`: Set the access token
+
+**Examples:**
+```bash
+# Show current configuration
+gts config
+gts config --show
+
+# Set access token
+gts config --set-token abc123def456
+```
+
+:::note
+- Configuration is stored in `~/.config/gtunnel/config.yaml`
+- Access token is required for secure connections
+:::
+
+#### status
+
+Show server status.
+
+```bash
+gts status
+```
+
+:::warning
+Currently shows a mock status. Real status implementation coming soon.
+:::
+
+#### version
 
 Show version information.
 
 ```bash
-gtunnel-server version
+gts version [flags]
 ```
 
-## Configuration Files
+**Flags:**
+- `--output`, `-o`: Output format. One of: `default|json|short`
 
-### Client Configuration
+#### completion
 
-Default location: `~/.gtunnel/client.yml`
+Generate shell autocompletion script.
 
-```yaml
-server:
-  url: "wss://tunnel.example.com"
-  auth_token: "your-auth-token"
-  insecure: false
-
-tunnels:
-  - name: "web-dev"
-    local_port: 3000
-    subdomain: "myapp"
-  - name: "api-dev"
-    local_port: 8080
-    subdomain: "api"
+```bash
+gts completion [bash|zsh|fish|powershell]
 ```
 
-### Server Configuration
+## Configuration
 
-Default location: `/etc/gtunnel/server.yml`
+For detailed configuration information including file-based and environment variable configuration, Docker setup, and Kubernetes deployment, see the [Configuration documentation](./configuration.md).
 
-```yaml
-server:
-  port: 8080
-  domain: "tunnel.example.com"
-  tls:
-    cert_file: "/path/to/cert.pem"
-    key_file: "/path/to/key.pem"
+### Quick Configuration Reference
 
-auth:
-  required: true
-  tokens:
-    - "token-1"
-    - "token-2"
-
-limits:
-  max_connections: 100
-  max_tunnels_per_client: 5
+**Client:**
+```bash
+gtc config --set-url example.com:8080
+gtc config --set-token your-token
 ```
+
+**Server:**
+```bash
+gts config --set-token your-secure-token
+```
+
+**Environment Variables (Server):**
+```bash
+export GTUNNEL_USE_ENV=true
+export GTUNNEL_ACCESS_TOKEN=your-token
+```
+
+
 
 ## Environment Variables
 
-### Client
+### Server Environment Variables
 
-- `GTUNNEL_SERVER_URL`: Default server URL
-- `GTUNNEL_AUTH_TOKEN`: Default authentication token
-- `GTUNNEL_CONFIG_PATH`: Configuration file path
+For containerized or serverless deployments, you can use environment variables instead of configuration files:
 
-### Server
+- `GTUNNEL_USE_ENV`: Set to `"true"` to enable environment variable configuration mode
+- `GTUNNEL_ACCESS_TOKEN`: Server access token (when `GTUNNEL_USE_ENV=true`)
 
-- `GTUNNEL_PORT`: Server port
-- `GTUNNEL_DOMAIN`: Server domain
-- `GTUNNEL_TLS_CERT`: TLS certificate file
-- `GTUNNEL_TLS_KEY`: TLS private key file
-- `GTUNNEL_CONFIG_PATH`: Configuration file path
+:::note Environment Configuration Mode
+When `GTUNNEL_USE_ENV=true` is set, the server will:
+- Load configuration from environment variables instead of files
+- Disable config file creation and modification commands
+- Work seamlessly in containerized and serverless environments
+:::
 
-## Exit Codes
+### Client Environment Variables
 
-- `0`: Success
-- `1`: General error
-- `2`: Configuration error
-- `3`: Connection error
-- `4`: Authentication error
-- `5`: Permission error
+Currently, gTunnel client uses configuration files. Environment variable support for the client may be added in future versions.
 
-## Examples
+## Troubleshooting
 
-### Quick Start
+### Common Issues
+
+1. **"Not configured" error**: Run `gtc config --set-url <server-url>` to set the server URL
+2. **Connection failures**: Use `gtc status -v` to check server connectivity  
+3. **Authentication errors**: Ensure access token is set with `gtc config --set-token <token>`
+
+:::tip Troubleshooting Steps
+1. Check configuration: `gtc config`
+2. Test connectivity: `gtc status -v`
+3. Verify server is running: `gts status`
+4. Enable debug mode: `gtc connect -d <port>`
+:::
+
+### Debug Mode
+
+Enable debug logging with the `-d` flag to see detailed connection information:
 
 ```bash
-# Start a tunnel for local development server
-gtunnel-client connect --server wss://tunnel.example.com --port 3000
+# Client debug mode
+gtc connect -d 3000
 
-# Start server with custom domain
-gtunnel-server start --port 8080 --domain tunnel.example.com
+# Server debug mode
+gts start -d
 ```
-
-### Advanced Usage
-
-```bash
-# Connect with authentication
-gtunnel-client connect \
-  --server wss://tunnel.example.com \
-  --port 8080 \
-  --auth-token your-token \
-  --subdomain myapp
-
-# Start server with TLS
-gtunnel-server start \
-  --port 443 \
-  --domain tunnel.example.com \
-  --tls-cert /path/to/cert.pem \
-  --tls-key /path/to/key.pem
-```
-
-<!-- For more examples and use cases, see our [examples documentation](./examples.md). -->

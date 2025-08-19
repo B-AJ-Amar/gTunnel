@@ -89,7 +89,7 @@ const config: Config = {
       },
       items: [
         {
-          to: '/quick-start',
+          to: '/docs/getting-started/quick-start',
           label: 'Quick Start',
           position: 'left'
         },

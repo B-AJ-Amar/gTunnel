@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# gTunnel Documentation
+# Introduction
 
 Welcome to the comprehensive gTunnel documentation! This guide will help you understand, configure, and deploy gTunnel for your tunneling needs.
 

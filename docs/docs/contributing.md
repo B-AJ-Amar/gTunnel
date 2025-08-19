@@ -232,7 +232,7 @@ gTunnel follows semantic versioning (SemVer):
 
 - [GitHub Issues](https://github.com/B-AJ-Amar/gTunnel/issues) - Bug reports and feature requests
 - [GitHub Discussions](https://github.com/B-AJ-Amar/gTunnel/discussions) - General discussions
-- [Documentation](./intro.md) - Project documentation
+- [Documentation](./introduction.md) - Project documentation
 
 ### Code of Conduct
 
