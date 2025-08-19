@@ -66,7 +66,7 @@ func (r *ClientConfigRepo) InitConfig() error {
 			// Set default values
 			defaultConfig := &models.ClientConfig{
 				AccessToken: "",
-				ServerURL:   "ws://localhost:5780/___gTl___/ws",
+				ServerURL:   "localhost:5780",
 			}
 
 			// Create the config file with defaults

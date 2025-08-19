@@ -35,10 +35,26 @@ Examples:
 
 		// Handle different operations
 		if setURL != "" {
-			// Ensure URL starts with ws:// or wss://
-			if !strings.HasPrefix(setURL, "ws://") && !strings.HasPrefix(setURL, "wss://") {
-				setURL = "ws://" + setURL
+			// Clean up URL: remove protocol and endpoint
+			cleanURL := setURL
+			
+			// Remove protocol prefix if present
+			if strings.HasPrefix(cleanURL, "ws://") {
+				cleanURL = strings.TrimPrefix(cleanURL, "ws://")
+			} else if strings.HasPrefix(cleanURL, "wss://") {
+				cleanURL = strings.TrimPrefix(cleanURL, "wss://")
+			} else if strings.HasPrefix(cleanURL, "http://") {
+				cleanURL = strings.TrimPrefix(cleanURL, "http://")
+			} else if strings.HasPrefix(cleanURL, "https://") {
+				cleanURL = strings.TrimPrefix(cleanURL, "https://")
 			}
+			
+			// Remove endpoint suffix if present (anything after the port)
+			if strings.Contains(cleanURL, "/") {
+				cleanURL = strings.Split(cleanURL, "/")[0]
+			}
+			
+			setURL = cleanURL
 
 			if err := configRepo.UpdateServerURL(setURL); err != nil {
 				logger.Fatalf("Failed to update server URL: %v", err)
