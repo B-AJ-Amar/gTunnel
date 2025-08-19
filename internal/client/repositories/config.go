@@ -66,7 +66,7 @@ func (r *ClientConfigRepo) InitConfig() error {
 			// Set default values
 			defaultConfig := &models.ClientConfig{
 				AccessToken: "",
-				ServerURL:   "localhost:5780",
+				ServerURL:   "gtunnel-server-1i1b.onrender.com", // default url for the version v0.0.0
 			}
 
 			// Create the config file with defaults

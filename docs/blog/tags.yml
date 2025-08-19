@@ -1,0 +1,94 @@
+announcement:
+  label: Announcement
+  permalink: /tags/announcement
+  description: Official announcements and project updates
+
+welcome:
+  label: Welcome
+  permalink: /tags/welcome
+  description: Introduction and welcome messages
+
+getting-started:
+  label: Getting Started
+  permalink: /tags/getting-started
+  description: Beginner-friendly guides and tutorials
+
+tunneling:
+  label: Tunneling
+  permalink: /tags/tunneling
+  description: HTTP tunneling and networking topics
+
+go:
+  label: Go
+  permalink: /tags/go
+  description: Go programming language related content
+
+docker:
+  label: Docker
+  permalink: /tags/docker
+  description: Docker containerization and deployment
+
+development:
+  label: Development
+  permalink: /tags/development
+  description: Software development and programming
+
+networking:
+  label: Networking
+  permalink: /tags/networking
+  description: Network protocols and infrastructure
+
+security:
+  label: Security
+  permalink: /tags/security
+  description: Security features and best practices
+
+deployment:
+  label: Deployment
+  permalink: /tags/deployment
+  description: Deployment guides and production setup
+
+tutorial:
+  label: Tutorial
+  permalink: /tags/tutorial
+  description: Step-by-step tutorials and how-to guides
+
+websockets:
+  label: WebSockets
+  permalink: /tags/websockets
+  description: WebSocket technology and implementation
+
+api:
+  label: API
+  permalink: /tags/api
+  description: API development and integration
+
+cli:
+  label: CLI
+  permalink: /tags/cli
+  description: Command-line interface and tools
+
+opensource:
+  label: Open Source
+  permalink: /tags/opensource
+  description: Open source development and community
+
+performance:
+  label: Performance
+  permalink: /tags/performance
+  description: Performance optimization and benchmarks
+
+devops:
+  label: DevOps
+  permalink: /tags/devops
+  description: DevOps practices and automation
+
+release:
+  label: Release
+  permalink: /tags/release
+  description: Version releases and changelogs
+
+github:
+  label: GitHub
+  permalink: /tags/github
+  description: GitHub features and workflows
