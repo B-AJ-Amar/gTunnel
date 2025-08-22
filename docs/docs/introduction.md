@@ -43,33 +43,24 @@ gTunnel consists of two main components:
 ## Quick Navigation
 
 ### Getting Started
-- [Quick Start Guide](../quick-start) - Get running in 5 minutes
-- [Installation](./installation) - Detailed installation options
+- [Quick Start Guide](./getting-started/quick-start) - Get running in 5 minutes
+- [Installation](./getting-started/installation) - Detailed installation options
 - [Basic Configuration](./configuration) - Essential configuration
 
 ### Core Features
-- [Client Configuration](./client-config) - Configure the client component
-- [Server Configuration](./server-config) - Configure the server component
-- [Authentication](./security) - Security and authentication options
-<!-- - [Routing](./routing) - Traffic routing and management -->
-
-### Deployment
-- [Docker Deployment](./docker) - Deploy with Docker and Docker Compose
-<!-- - [Production Setup](./production) - Production deployment guide -->
-<!-- - [Monitoring](./monitoring) - Monitoring and observability -->
+- [CLI Reference](./cli-reference) - Complete command reference
+- [Configuration Guide](./configuration) - Detailed configuration options
+- [Deployment Guide](./deployment) - Deployment and hosting options
 
 ### Advanced Topics
-<!-- - [Custom Protocols](./protocols) - Support for custom protocols -->
-<!-- - [Load Balancing](./load-balancing) - Scale with multiple servers -->
-<!-- - [API Reference](./api) - REST API documentation -->
-- [Troubleshooting](./troubleshooting) - Common issues and solutions
+- [FAQ](./faq) - Frequently asked questions and troubleshooting
 
 ## Community & Support
 
 - 📋 [FAQ](./faq) - Frequently asked questions
 - 🐛 [Issue Tracker](https://github.com/B-AJ-Amar/gTunnel/issues) - Report bugs and request features  
 - 💬 [Discussions](https://github.com/B-AJ-Amar/gTunnel/discussions) - Community discussions
-<!-- - 📖 [Contributing](./contributing) - How to contribute to the project -->
+- 📖 [Contributing](./contributing) - How to contribute to the project
 
 ## Version Information
 
@@ -77,6 +68,6 @@ This documentation covers gTunnel v0.0.0 and later. For older versions, please r
 
 ---
 
-**New to gTunnel?** Start with our [Quick Start Guide](../quick-start) to get up and running in minutes!
+**New to gTunnel?** Start with our [Quick Start Guide](./getting-started/quick-start) to get up and running in minutes!
 
 **Need specific help?** Use the navigation menu to find detailed information about any aspect of gTunnel.

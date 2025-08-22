@@ -169,11 +169,11 @@ const config: Config = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/intro',
+              to: '/docs/getting-started/introduction',
             },
             {
               label: 'Installation',
-              to: '/docs/installation',
+              to: '/docs/getting-started/installation',
             },
             {
               label: 'CLI Reference',

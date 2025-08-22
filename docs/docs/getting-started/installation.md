@@ -270,7 +270,7 @@ docker-compose up -d
 </Tabs>
 
 :::tip Cloud Deployment
-For quick cloud deployment, check out our [Deployment Guide](../deployment.md) which includes one-click deployment options.
+For quick cloud deployment, check out our [Deployment Guide](/deployment.md) which includes one-click deployment options.
 :::
 
 ## ✅ Verify Installation
@@ -342,11 +342,11 @@ docker inspect gtunnel-client
 
 Now that you have gTunnel installed:
 
-1. **[Quick Start](./quick-start.md)** - Get your first tunnel running
-2. **[Configuration](../configuration.md)** - Set up authentication and preferences  
-3. **[CLI Reference](../cli-reference.md)** - Learn all available commands
-4. **[Deployment](../deployment.md)** - Deploy your own server
+1. **[Quick Start](/getting-started/quick-start.md)** - Get your first tunnel running
+2. **[Configuration](/configuration.md)** - Set up authentication and preferences  
+3. **[CLI Reference](/cli-reference.md)** - Learn all available commands
+4. **[Deployment](/deployment.md)** - Deploy your own server
 
 ---
 
-Need help? Check our **[FAQ](../faq.md)** or visit our **[GitHub Issues](https://github.com/B-AJ-Amar/gTunnel/issues)** for support.
+Need help? Check our **[FAQ](/faq.md)** or visit our **[GitHub Issues](https://github.com/B-AJ-Amar/gTunnel/issues)** for support.

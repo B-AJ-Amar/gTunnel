@@ -66,7 +66,7 @@ gtc connect -u your-domain 3000
 
 That's it! Your local service is now accessible through the tunnel.
 
-**Want more detailed instructions?** Check out our comprehensive [Quick Start Guide](/quick-start) for step-by-step setup, Docker usage, and common use cases.
+**Want more detailed instructions?** Check out our comprehensive [Quick Start Guide](/docs/getting-started/quick-start) for step-by-step setup, Docker usage, and common use cases.
 
 
 ## Getting Involved
@@ -81,8 +81,8 @@ gTunnel is open source and we welcome contributions! Here's how you can get invo
 
 ## Resources
 
-- 📚 [Quick Start Guide](/quick-start) - Get running in 5 minutes
-- 📖 [Full Documentation](/docs/intro) - Comprehensive guides
+- 📚 [Quick Start Guide](/docs/getting-started/quick-start) - Get running in 5 minutes
+- 📖 [Full Documentation](/docs/introduction) - Comprehensive guides
 - 🔧 [GitHub Repository](https://github.com/B-AJ-Amar/gTunnel) - Source code
 - 🐳 [Docker Images](https://ghcr.io/b-aj-amar/gtunnel-server) - Container images
 - 💬 [Discussions](https://github.com/B-AJ-Amar/gTunnel/discussions) - Community support

@@ -162,16 +162,16 @@ gtc connect -u tunnel-server:7205 8080
 
 ## Next Steps
 
-- 📖 Read the [full documentation](../introduction.md) for advanced configuration
+- 📖 Read the [full documentation](/introduction.md) for advanced configuration
 - 🚀 Deploy your own [production server](../deployment)
-- 🎯 Check out [cli references](../cli-reference.md)
+- 🎯 Check out [cli references](/cli-reference.md)
 
 ## Need Help?
 
-- 📋 Check the [FAQ](../faq.md)
+- 📋 Check the [FAQ](/faq.md)
 - 🐛 [Report issues on GitHub](https://github.com/B-AJ-Amar/gTunnel/issues)
 - 💬 [Join our discussions](https://github.com/B-AJ-Amar/gTunnel/discussions)
 
 ---
 
-**Ready to dive deeper?** Explore our comprehensive [documentation](../introduction.md) for advanced features and configuration options.
+**Ready to dive deeper?** Explore our comprehensive [documentation](/introduction.md) for advanced features and configuration options.

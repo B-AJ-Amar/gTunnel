@@ -245,7 +245,7 @@ function CTASection() {
           <div className={styles.ctaButtons}>
             <Link
               className="button button--primary button--lg"
-              to="/quick-start">
+              to="/docs/getting-started/quick-start">
               Start Tunneling Now
             </Link>
             <Link
