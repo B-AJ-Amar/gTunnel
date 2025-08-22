@@ -79,462 +79,66 @@ gtc connect -u https://gtunnel-server-1i1b.onrender.com -e /my-app 3000
 
 ## 📦 Installation
 
-### Client Installation
-
-#### Option 1: Download Binary (Recommended)
-
-**Linux/macOS:**
-```bash
-# Download and install
-curl -L https://github.com/B-AJ-Amar/gTunnel/releases/latest/download/gtunnel-client_linux_amd64.tar.gz | tar -xz
-sudo mv gtc /usr/local/bin/
-
-# Verify installation
-gtc version
-```
-
-**Windows:**
-```powershell
-# Download from GitHub releases
-Invoke-WebRequest -Uri "https://github.com/B-AJ-Amar/gTunnel/releases/latest/download/gtunnel-client_windows_amd64.zip" -OutFile "gtunnel-client.zip"
-Expand-Archive gtunnel-client.zip
-```
-
-#### Option 2: Package Managers
-
-**Linux (DEB/RPM/APK):**
-```bash
-# Debian/Ubuntu
-wget https://github.com/B-AJ-Amar/gTunnel/releases/latest/download/gtunnel_linux_amd64.deb
-sudo dpkg -i gtunnel_linux_amd64.deb
-
-# Red Hat/CentOS/Fedora
-wget https://github.com/B-AJ-Amar/gTunnel/releases/latest/download/gtunnel-1.0.0-1.x86_64.rpm
-sudo rpm -i gtunnel-1.0.0-1.x86_64.rpm
-
-# Alpine Linux
-wget https://github.com/B-AJ-Amar/gTunnel/releases/latest/download/gtunnel-1.0.0-r0.apk
-sudo apk add --allow-untrusted gtunnel-1.0.0-r0.apk
-```
-
-#### Option 3: Installation Script (Flexible)
-
-The installation script supports installing client, server, or both components with a single command:
+### Quick Installation
 
 ```bash
-# Install client only (default)
+# Install client (recommended for most users)
 curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash
 
-# Install server only
+# Install server for self-hosting
 curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash -s server
-
-# Install both client and server
-curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash -s both
-
-# Install specific version
-curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash -s -- --version v1.0.0 client
-
-# Custom installation directory
-INSTALL_DIR=~/.local/bin bash <(curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh) both
-
-# Get help and see all options
-curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash -s -- --help
 ```
 
-**Features:**
+### Alternative Methods
 
-- ✅ **Cross-platform** - Works on Linux, macOS, and Windows
-- ✅ **Architecture detection** - Automatically detects amd64, arm64, 386
-- ✅ **Version selection** - Install latest or specific version
-- ✅ **Component selection** - Choose client, server, or both
-- ✅ **Custom install directory** - Install to any directory
-- ✅ **Verification** - Automatically verifies installation
+- **[Download Binaries](https://github.com/B-AJ-Amar/gTunnel/releases)** - Direct downloads for all platforms
+- **[Docker Images](https://ghcr.io/b-aj-amar/gtunnel-client)** - Container deployment
+- **Package Managers** - DEB, RPM, APK packages
 
-#### Option 4: Build from Source
-
-```bash
-# Prerequisites: Go 1.19+
-git clone https://github.com/B-AJ-Amar/gTunnel.git
-cd gTunnel
-
-# Build both client and server
-make build
-
-# Install to system
-sudo make install
-```
-
-#### Option 5: Docker
-
-For containerized environments and microservices:
-
-```bash
-# Run client in Docker
-docker run -d --name gtunnel-client \
-  -e GTUNNEL_SERVER_URL="https://your-server.com" \
-  -e GTUNNEL_ACCESS_TOKEN="your-token" \
-  -e GTUNNEL_TARGET_HOST="app" \
-  -e GTUNNEL_TARGET_PORT="3000" \
-  --network your-network \
-  ghcr.io/b-aj-amar/gtunnel-client:latest
-
-# With Docker Compose
-cat > docker-compose.yml << EOF
-version: '3.8'
-services:
-  app:
-    image: your-app:latest
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
-
-  gtunnel-client:
-    image: ghcr.io/b-aj-amar/gtunnel-client:latest
-    environment:
-      - GTUNNEL_SERVER_URL=https://your-server.com
-      - GTUNNEL_ACCESS_TOKEN=your-token
-      - GTUNNEL_TARGET_HOST=app
-      - GTUNNEL_TARGET_PORT=3000
-      - GTUNNEL_BASE_ENDPOINT=/my-app
-      - GTUNNEL_DEBUG=false
-    depends_on:
-      - app
-    networks:
-      - app-network
-    restart: unless-stopped
-
-networks:
-  app-network:
-    driver: bridge
-EOF
-
-docker-compose up -d
-```
-
-**Environment Variables:**
-
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `GTUNNEL_SERVER_URL` | gTunnel server URL | `""` | ✅ |
-| `GTUNNEL_ACCESS_TOKEN` | Authentication token | `""` | ❌ |
-| `GTUNNEL_TARGET_HOST` | Target host to tunnel | `localhost` | ❌ |
-| `GTUNNEL_TARGET_PORT` | Target port to tunnel | `3000` | ❌ |
-| `GTUNNEL_BASE_ENDPOINT` | Base endpoint path | `""` | ❌ |
-| `GTUNNEL_DEBUG` | Enable debug logging | `false` | ❌ |
-
-### Server Installation
-
-#### Option 1: Installation Script (Recommended)
-```bash
-# Install server only
-curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash -s server
-
-# Install both client and server
-curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash -s both
-
-# Install specific version
-curl -sSL https://raw.githubusercontent.com/B-AJ-Amar/gTunnel/main/scripts/install.sh | bash -s -- --version v1.0.0 server
-```
-
-#### Option 2: Docker (Cloud Deployment)
-```bash
-# Run server with Docker
-docker run -d --name gtunnel-server 
-  -p 7205:7205 
-  -e GTUNNEL_ACCESS_TOKEN="your-secret-token" 
-  ghcr.io/b-aj-amar/gtunnel-server:latest
-
-# Or with Docker Compose
-cat > docker-compose.yml << EOF
-version: '3.8'
-services:
-  gtunnel-server:
-    image: ghcr.io/b-aj-amar/gtunnel-server:latest
-    ports:
-      - "7205:7205"
-    environment:
-      - GTUNNEL_ACCESS_TOKEN=your-secret-token
-      - GTUNNEL_USE_ENV=true
-    restart: unless-stopped
-EOF
-
-docker-compose up -d
-```
+📖 **For detailed installation instructions, see our [Installation Guide](https://b-aj-amar.github.io/gTunnel/docs/getting-started/installation)**
 
 ## 📖 Usage
 
 ### Basic Client Usage
 
-**Expose a local service:**
 ```bash
-# Expose localhost:3000
-gtc connect 3000
+# Connect to public server (replace with your server URL)
+gtc connect -u https://gtunnel-server-1i1b.onrender.com -e /my-app 3000
 
-# Expose specific host:port
-gtc connect myapp.local:8080
-
-# Connect to custom server
-gtc connect -u https://your-server.com 3000
-
-# Connect with custom base path
-gtc connect -e /my-app 3000
+# Your app is now available at: https://gtunnel-server-1i1b.onrender.com/my-app
 ```
 
-**Configuration:**
+### Server Usage
+
 ```bash
-# Set default server URL
-gtc config --set-url https://your-server.com
-
-# Set access token
-gtc config --set-token your-token
-
-# View current config
-gtc config show
+# Start your own server
+gts start --bind-address 0.0.0.0:7205
 ```
 
-### Docker Client Usage
-
-**Run client in a container:**
-```bash
-# Basic usage
-docker run --rm \
-  -e GTUNNEL_SERVER_URL="https://your-server.com" \
-  -e GTUNNEL_TARGET_HOST="host.docker.internal" \
-  -e GTUNNEL_TARGET_PORT="3000" \
-  ghcr.io/b-aj-amar/gtunnel-client:latest
-
-# With authentication
-docker run --rm \
-  -e GTUNNEL_SERVER_URL="https://your-server.com" \
-  -e GTUNNEL_ACCESS_TOKEN="your-token" \
-  -e GTUNNEL_TARGET_HOST="host.docker.internal" \
-  -e GTUNNEL_TARGET_PORT="8080" \
-  -e GTUNNEL_BASE_ENDPOINT="/api" \
-  ghcr.io/b-aj-amar/gtunnel-client:latest
-
-# Debug mode
-docker run --rm \
-  -e GTUNNEL_DEBUG="true" \
-  -e GTUNNEL_SERVER_URL="https://your-server.com" \
-  -e GTUNNEL_TARGET_HOST="host.docker.internal" \
-  -e GTUNNEL_TARGET_PORT="3000" \
-  ghcr.io/b-aj-amar/gtunnel-client:latest
-```
-
-### Basic Server Usage
-
-**Start the server:**
-```bash
-# Start with default settings
-gts start
-
-# Start on custom address
-gts start --bind-address 0.0.0.0:8080
-
-# Start with debug logging
-gts start --debug
-```
-
-**Configuration:**
-```bash
-# Set access token
-gts config set access-token your-secret-token
-
-# View server status
-gts status
-
-# View version
-gts version
-```
+📖 **For complete usage examples and configuration, see our [Documentation](https://b-aj-amar.github.io/gTunnel/docs/introduction)**
 
 ## 🌐 Deployment
 
-### Cloud Platforms
+### Quick Deploy (Recommended)
 
-#### Render (Free Tier)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/B-AJ-Amar/gTunnel)
 
-**What you get:**
-- ✅ Free HTTPS URL (e.g., `https://your-app.onrender.com`)
-- ✅ Automatic SSL certificates
-- ✅ Health checks and auto-restart
-- ✅ Auto-deploy on git push
-- ✅ Environment variable management
+Deploy your own gTunnel server with one click - includes free HTTPS, automatic SSL, and health monitoring.
 
-<!-- #### Railway
-```bash
-# Install Railway CLI and deploy
-railway login
-railway init
-railway up
-```
+📖 **For self-hosted options and advanced deployment, see our [Deployment Guide](https://b-aj-amar.github.io/gTunnel/docs/deployment)**
 
-#### Heroku
-```bash
-# Deploy to Heroku
-heroku create your-gtunnel-server
-heroku container:push web
-heroku container:release web
-``` -->
+## 📚 Documentation
 
-### Self-Hosted
+Our comprehensive documentation covers everything you need:
 
-#### VPS/Dedicated Server
+- 🚀 **[Quick Start](https://b-aj-amar.github.io/gTunnel/docs/getting-started/quick-start)** - Get running in 5 minutes
+- 📦 **[Installation](https://b-aj-amar.github.io/gTunnel/docs/getting-started/installation)** - All installation methods
+- ⚙️ **[Configuration](https://b-aj-amar.github.io/gTunnel/docs/configuration)** - Detailed configuration options
+- 🌐 **[Deployment](https://b-aj-amar.github.io/gTunnel/docs/deployment)** - Production deployment guides
+- 🛠️ **[CLI Reference](https://b-aj-amar.github.io/gTunnel/docs/cli-reference)** - Complete command reference
+- ❓ **[FAQ](https://b-aj-amar.github.io/gTunnel/docs/faq)** - Frequently asked questions
 
-**Using systemd (Linux):**
-```bash
-# Download and install
-wget https://github.com/B-AJ-Amar/gTunnel/releases/latest/download/gtunnel-server_linux_amd64.tar.gz
-tar -xzf gtunnel-server_linux_amd64.tar.gz
-sudo mv gts /usr/local/bin/
-
-# Create service user
-sudo useradd --system --shell /bin/false gtunnel
-
-# Create config
-sudo mkdir -p /etc/gtunnel
-echo "GTUNNEL_ACCESS_TOKEN=your-secret-token" | sudo tee /etc/gtunnel/server.env
-
-# Create systemd service
-sudo tee /etc/systemd/system/gtunnel.service > /dev/null << EOF
-[Unit]
-Description=gTunnel Server
-After=network.target
-
-[Service]
-Type=simple
-User=gtunnel
-ExecStart=/usr/local/bin/gts start --bind-address 0.0.0.0:7205
-EnvironmentFile=/etc/gtunnel/server.env
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Start and enable service
-sudo systemctl daemon-reload
-sudo systemctl enable gtunnel
-sudo systemctl start gtunnel
-```
-
-#### Docker Compose
-
-**Production setup:**
-```yaml
-version: '3.8'
-services:
-  gtunnel-server:
-    image: ghcr.io/b-aj-amar/gtunnel-server:latest
-    ports:
-      - "443:7205"
-    environment:
-      - GTUNNEL_ACCESS_TOKEN=${GTUNNEL_ACCESS_TOKEN}
-      - GTUNNEL_USE_ENV=true
-      - GTUNNEL_LOG_LEVEL=info
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7205/___gTl___/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    networks:
-      - gtunnel
-
-  # Optional: Reverse proxy
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./ssl:/etc/nginx/ssl
-    depends_on:
-      - gtunnel-server
-    networks:
-      - gtunnel
-
-networks:
-  gtunnel:
-    driver: bridge
-```
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-**Server:**
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `GTUNNEL_ACCESS_TOKEN` | Authentication token | `""` |
-| `GTUNNEL_USE_ENV` | Use environment variables | `false` |
-| `GTUNNEL_LOG_LEVEL` | Log level (debug/info/warn/error) | `info` |
-| `PORT` | Server port (for cloud platforms) | `7205` |
-
-**Client:**
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `GTUNNEL_SERVER_URL` | Default server URL | `""` |
-| `GTUNNEL_ACCESS_TOKEN` | Authentication token | `""` |
-
-### Configuration Files
-
-**Client config** (`~/.config/gtunnel/config.yaml`):
-```yaml
-server_url: "https://your-server.com"
-access_token: "your-token"
-```
-
-**Server config** (`~/.config/gtunnel/config.yaml`):
-```yaml
-access_token: "your-secret-token"
-```
-
-## 🛠️ CLI Reference
-
-### gtc (Client)
-
-```bash
-# Connection
-gtc connect [flags] <port|host:port>
-  -u, --server-url string     Server URL (e.g., example.com:443)
-  -e, --base-endpoint string  Base endpoint path
-  -d, --debug                 Enable debug logging
-
-# Configuration
-gtc config <command>
-  set <key> <value>          Set configuration value
-  get <key>                  Get configuration value
-  show                       Show all configuration
-
-# Utility
-gtc version                  Show version information
-gtc completion <shell>       Generate completion script
-```
-
-### gts (Server)
-
-```bash
-# Server management
-gts start [flags]
-  --bind-address string      Address to bind (default "0.0.0.0:7205")
-  -d, --debug               Enable debug logging
-
-# Status and monitoring
-gts status                   Show server status
-gts version                  Show version information
-
-# Configuration
-gts config <command>
-  set <key> <value>          Set configuration value
-  show                       Show configuration
-
-# Utility
-gts completion <shell>       Generate completion script
-```
+**Visit [Documentation Site](https://b-aj-amar.github.io/gTunnel/) for the complete guide.**
 
 ## 🧪 Development
 
