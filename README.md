@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/github/license/B-AJ-Amar/gTunnel)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/B-AJ-Amar/gTunnel)
 ![Release](https://img.shields.io/github/v/release/B-AJ-Amar/gTunnel)
-![Downloads](https://img.shields.io/github/downloads/B-AJ-Amar/gTunnel/total)
+<!--![Downloads](https://img.shields.io/github/downloads/B-AJ-Amar/gTunnel/total) -->
 
 ## ✨ Features
 
